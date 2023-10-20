@@ -1,21 +1,32 @@
 package Backend;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RAM {
 
-	private short pagesQuantity = 100;
-	private Int[] pages;
-	private boolean full = false;
+	private final short pagesQuantity = 100;
+	private List<Integer> pages;
+	private boolean full;
+
+	public RAM() {
+		this.pages = new ArrayList<>();
+		this.full = false;
+	}
 
 	public short getPagesQuantity() {
 		return this.pagesQuantity;
 	}
 
-	public void setPagesQuantity(short pagesQuantity) {
-		this.pagesQuantity = pagesQuantity;
-	}
-
-	public Int[] getPages() {
+	public List<Integer> getPages() {
 		return this.pages;
 	}
 
+	public boolean isFull() {
+		return full;
+	}
+
+	public void setFull(boolean full) {
+		this.full = full;
+	}
 }

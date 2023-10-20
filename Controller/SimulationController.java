@@ -2,6 +2,8 @@ package Controller;
 
 import Frontend.*;
 
+import java.util.List;
+
 public class SimulationController {
 
 	private WelcomeScreen welcomeScreen;

@@ -4,7 +4,7 @@ public class PageComponent {
 
 	private int length = 0;
 	private int height = 0;
-	private color color;
+	//private color color;
 
 	public int getLength() {
 		return this.length;
@@ -22,21 +22,21 @@ public class PageComponent {
 		this.height = height;
 	}
 
-	public color getColor() {
-		return this.color;
-	}
+	//public color getColor() {
+	//	return this.color;
+	//}
 
-	public void setColor(color color) {
-		this.color = color;
-	}
+	//public void setColor(color color) {
+		//this.color = color;
+	//}
 
 	/**
 	 * 
 	 * @param g
 	 */
-	public void paintComponent(Graphics g) {
+	//public void paintComponent(Graphics g) {
 		// TODO - implement PageComponent.paintComponent
-		throw new UnsupportedOperationException();
-	}
+	//	throw new UnsupportedOperationException();
+	//}
 
 }

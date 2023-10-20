@@ -1,27 +1,38 @@
 package Backend;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public class Process {
 
-	private int processID = 0;
-	private List<Int> pointers;
-	private int size = 0;
+	private int processID;
+	private Map<Integer, Integer> pointers;
+	private int size;
 
-	/**
-	 * 
-	 * @param pointer
-	 */
-	public void addPointer(int pointer) {
-		// TODO - implement Process.addPointer
-		throw new UnsupportedOperationException();
+	public Process(int processID, int ptrId, int size) {
+		this.processID = processID;
+		this.pointers = new HashMap<>();
+		this.addPointer(ptrId,size);
 	}
 
 	/**
 	 * 
-	 * @param pointer
+	 * @param ptrId
 	 */
-	public void removePointer(int pointer) {
-		// TODO - implement Process.removePointer
-		throw new UnsupportedOperationException();
+	public void addPointer(int ptrId, int size) {
+		this.pointers.put(ptrId, size);
+		this.size += size;
+	}
+
+	/**
+	 * 
+	 * @param ptrId
+	 */
+	public void removePointer(int ptrId) {
+		if (pointers.containsKey(ptrId)) {
+			this.size -= this.pointers.get(ptrId);
+			this.pointers.remove(ptrId);
+		}
 	}
 
 }
