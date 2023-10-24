@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Process {
 
 	private int processID;
-	private Map<Integer, Integer> pointers;
+	private Map<Integer, Integer> pointers; //ptr-size
 	private int size;
 
 	public Process(int processID, int ptrId, int size) {
@@ -15,6 +15,11 @@ public class Process {
 		this.addPointer(ptrId,size);
 	}
 
+	public int getProcessID() {
+		return processID;
+	}
+
+
 	/**
 	 * 
 	 * @param ptrId
@@ -22,6 +27,14 @@ public class Process {
 	public void addPointer(int ptrId, int size) {
 		this.pointers.put(ptrId, size);
 		this.size += size;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public int getSizePtr(int ptrId){
+		return pointers.get(ptrId);
 	}
 
 	/**

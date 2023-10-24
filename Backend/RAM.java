@@ -6,7 +6,7 @@ import java.util.List;
 public class RAM {
 
 	private final short pagesQuantity = 100;
-	private List<Integer> pages;
+	private ArrayList<Page> pages;
 	private boolean full;
 
 	public RAM() {
@@ -14,11 +14,19 @@ public class RAM {
 		this.full = false;
 	}
 
+	public void addPages(ArrayList<Page> pages){
+		this.pages.addAll(pages);
+	}
+
 	public short getPagesQuantity() {
 		return this.pagesQuantity;
 	}
 
-	public List<Integer> getPages() {
+	public int pagesLeft(){
+		return this.pagesQuantity-this.pages.size();
+	}
+
+	public ArrayList<Page> getPages() {
 		return this.pages;
 	}
 
