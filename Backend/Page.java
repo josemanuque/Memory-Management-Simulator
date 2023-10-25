@@ -10,12 +10,15 @@ public class Page {
 	private String logicalAddress;
 	private String loadedTime;
 	private final int size = 4; //4KB
+	private int referenceBit;
+	private long timestamp;
 
 	public Page(int pageID) {
 		this.pageID = pageID;
 		this.loaded = false;
 		this.logicalAddress = generateRandomString(10);
-
+		this.referenceBit = 0;
+		this.timestamp = 0;
 	}
 
 	private String generateRandomString(int length) {
@@ -62,4 +65,19 @@ public class Page {
 		this.logicalAddress = logicalAddress;
 	}
 
+	public int getReferenceBit() {
+		return referenceBit;
+	}
+
+	public void setReferenceBit(int referenceBit) {
+		this.referenceBit = referenceBit;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void updateTimestamp(long timestamp) {
+		this.timestamp = System.currentTimeMillis(); //usarlo en el use para actualizar tiempo de acceso
+	}
 }

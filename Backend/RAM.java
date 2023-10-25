@@ -37,4 +37,5 @@ public class RAM {
 	public void setFull(boolean full) {
 		this.full = full;
 	}
+
 }

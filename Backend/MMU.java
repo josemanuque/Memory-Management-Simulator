@@ -15,6 +15,7 @@ public class MMU {
 	private Map<Integer, ArrayList<Page>> pagesInfo; //Pointers relation with pages
 	private int ptrId;
 	private int pageId;
+	private Random random;
 
 	public MMU(){
 		this.ram = new RAM();
@@ -22,8 +23,8 @@ public class MMU {
 		this.symbolTable = new HashMap<>();
 		this.pagesInVirtualMemory = new ArrayList<>();
 		this.pagesInfo = new HashMap<>();
+		this.random = new Random();
 	}
-
 
 	public static void startSimulation(String fileName) {
 		try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
@@ -207,4 +208,83 @@ public class MMU {
 		}
 	}
 
+	public void fifoReplacement(){
+		//implementar actualizacion de punteros?
+		ArrayList<Page> pagesInRam = ram.getPages();
+
+		Page pageToReplace = pagesInRam.get(0);
+		pagesInRam.remove(pageToReplace);
+
+		pageToReplace.setLoaded(false);
+		pagesInVirtualMemory.add(pageToReplace);
+	}
+
+	public void secondChanceReplacement(){
+		//implementar actualizacion de punteros?
+		Page pageToReplace = null;
+		ArrayList<Page> pagesInRam = ram.getPages();
+		boolean found = false;
+
+		while(!found) {
+			for (int i = 0; i < pagesInRam.size(); i++) {
+				Page page = pagesInRam.get(i);
+				if (page.getReferenceBit() == 0) {
+					pageToReplace = page;
+					found = true;
+					break;
+				} else {
+					page.setReferenceBit(0);
+				}
+			}
+		}
+		pagesInRam.remove(pageToReplace);
+		pageToReplace.setLoaded(false);
+		pagesInVirtualMemory.add(pageToReplace);
+	}
+
+	public void mruReplacement(){
+		//implementar actualizacion de punteros?
+		ArrayList<Page> pagesInRam = ram.getPages();
+		Page pageToReplace = null;
+		long maxTimestamp = Long.MIN_VALUE;
+
+		for(Page page : pagesInRam){
+			if(page.getTimestamp() > maxTimestamp){
+				maxTimestamp = page.getTimestamp();
+				pageToReplace = page;
+			}
+		}
+		pagesInRam.remove(pageToReplace);
+		pageToReplace.setLoaded(false);
+		pagesInVirtualMemory.add(pageToReplace);
+	}
+
+	public void lruReplacement(){
+		//implementar actualizacion de punteros?
+		ArrayList<Page> pagesInRam = ram.getPages();
+		Page pageToReplace = null;
+		long minTimestamp = Long.MAX_VALUE;
+
+		for(Page page : pagesInRam){
+			if(page.getTimestamp() < minTimestamp){
+				minTimestamp = page.getTimestamp();
+				pageToReplace = page;
+			}
+		}
+		pagesInRam.remove(pageToReplace);
+		pageToReplace.setLoaded(false);
+		pagesInVirtualMemory.add(pageToReplace);
+	}
+
+	public void randomReplacement(){
+		//implementar actualizacion de punteros?
+		ArrayList<Page> pagesInRam = ram.getPages();
+
+		int randIndex = random.nextInt(pagesInRam.size());
+		Page pageToReplace = pagesInRam.get(randIndex);
+		pagesInRam.remove(pageToReplace);
+
+		pageToReplace.setLoaded(false);
+		pagesInVirtualMemory.add(pageToReplace);
+	}
 }
