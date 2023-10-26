@@ -135,10 +135,10 @@ public class MMU {
 	 */
 	public int newProcess(int processId, int size) {
 		ptrId += 1;
-		pageId +=1;
 		int numberOfPages = calculatePages(size);
 		ArrayList<Page> processPages = new ArrayList<>();
 		for (int i=0; i<numberOfPages; i++){
+			pageId +=1;
 			Page page = new Page(pageId);
 			processPages.add(page);
 		}
@@ -156,6 +156,8 @@ public class MMU {
 		return ptrId;
 	}
 
+
+
 	/**
 	 * 
 	 * @param ptr
@@ -164,48 +166,22 @@ public class MMU {
 		int spaceLeft = ram.pagesLeft();
 		ArrayList<Page> ptrPages = pagesInfo.get(ptr);
 
-		/*recorrer paginas que vienen y ver si ya están
-		si están, actualice tiempo y bit de referencia.
-		ES UN HIT
-
-		sino: ES UN FALLO
-		 ver si ram está llena o no
-	     * si está: agarro pag no cargadas y les aplico algoritmo
-	     * sino:
-	        veo si queda campo suficiente
-	        * si hay: agrego paginas a ram y cambio estado a cargadas
-	        * sino:
-	           agrego las que caben y las que no, aplico algoritmo
-		*/
-
-		if (!this.ram.isFull()){
-			if (spaceLeft >= ptrPages.size()){ // si hay campo
-				ram.addPages(ptrPages);
-				for (int i=0; i<ptrPages.size(); i++){
-					ptrPages.get(i).setLoaded(true, String.valueOf(ram.getPages().size()-1));
-				}
-			} else {
-				ram.addPages((ArrayList<Page>) ptrPages.subList(0,spaceLeft));
-				for (int i=0; i<spaceLeft; i++){
-					ptrPages.get(i).setLoaded(true, String.valueOf(ram.getPages().size()-1));
-				}
-			}
-		} else {
-			for (int i=0; i< ptrPages.size();i++){
-				if (!ptrPages.get(i).isLoaded()){
-					pagesToReplace.add(ptrPages.get(i));
-				}
-			}
-			if (pagesToReplace.size()!=0){
-				for (Page page : pagesToReplace) {
-					if (!this.ram.getPages().contains(page)) {
-						runAlgorithm(algName, page);
-					}else{ //si contiene pag, actualiza tiempo y bit de referencia
-						page.updateTimestamp();
-						page.updateReferenceBit();
+		for (Page page : ptrPages) {
+			if (!page.isLoaded()){
+				if (!this.ram.isFull()){
+					if (spaceLeft >= ptrPages.size()){
+						ram.addPages(page);
+						page.setLoaded(true, String.valueOf(ram.getPages().size()-1));
+					} else {
+						ArrayList<Page> pagesToAllocate = (ArrayList<Page>) ptrPages.subList(0,spaceLeft);
+						for (int i=0; i<spaceLeft; i++){
+							ram.addPages(pagesToAllocate.get(i));
+							ptrPages.get(i).setLoaded(true, String.valueOf(ram.getPages().size()-1));
+						}
 					}
+				} else {
+					runAlgorithm(algName, page);
 				}
-				pagesToReplace.clear();
 			}
 		}
 	}
@@ -219,7 +195,7 @@ public class MMU {
 		ArrayList<Page> pagesToDelete = pagesInfo.get(ptr);
 		ArrayList<Page> pagesInRAM = ram.getPages();
 
-		/*for (int i=0; i<pagesToDelete.size(); i++){
+		for (int i=0; i<pagesToDelete.size(); i++){
 			Page page = pagesToDelete.get(i); //page to delete
 			for (int j=0; j<pagesInRAM.size();j++){
 				Page ramPage = pagesInRAM.get(j); //page to see if it needs to be deleted
@@ -227,11 +203,16 @@ public class MMU {
 					ram.getPages().remove(ramPage);
 				}
 			}
-		}*/
+		}
 
 		// Use retainAll to find and remove common elements
-		pagesInRAM.retainAll(pagesToDelete);
-
+		//pagesInRAM.retainAll(pagesToDelete);
+		//pagesToDelete.retainAll(pagesInRAM);
+		for (Page page: pagesToDelete){
+			if (pagesInVirtualMemory.contains(page)){
+				pagesInVirtualMemory.remove(page);
+			}
+		}
 		pagesInfo.remove(ptr);
 		symbolTable.remove(ptr);
 	}
@@ -242,16 +223,15 @@ public class MMU {
 	 */
 	public void kill(int processId) {
 		Process processToDelete = findProcess(processId);
+		Map<Integer, Process> pairToDelete = new HashMap<>();
 		for (Map.Entry<Integer, Process> entry : symbolTable.entrySet()) {
 			if (entry.getValue().equals(processToDelete)) {
-				delete(entry.getKey());
+				pairToDelete.put(entry.getKey(),entry.getValue());
 			}
 		}
 
-		for(int i=0; i< symbolTable.size(); i++){
-			if (symbolTable.get(i).getProcessID() == processId){
-				symbolTable.remove(i);
-			}
+		for (Integer key : pairToDelete.keySet()) {
+			symbolTable.remove(key);
 		}
 		for(int i=0; i< processes.size(); i++){
 			if (processes.get(i).getProcessID() == processId){
@@ -266,6 +246,7 @@ public class MMU {
 		Page pageToReplace = pagesInRam.get(0);
 		pagesInRam.remove(pageToReplace);
 		pagesInRam.add(newPage);
+		newPage.setLoaded(true, String.valueOf(ram.getPages().size()));
 
 		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);

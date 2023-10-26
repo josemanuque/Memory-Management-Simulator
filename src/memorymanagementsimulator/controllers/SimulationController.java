@@ -14,17 +14,23 @@ public class SimulationController {
 	private boolean isRunning = false;
 
 	public SimulationController(){
-		mmuOpt = new MMU("opt");
-		mmuUser = new MMU("");
+		//mmuOpt = new MMU("opt");
+		mmuUser = new MMU("fifo");
 	}
 
-	public void startSimulation() {
+	public void startSimulation(String filename) {
 		this.isRunning = true;
-		optThread = new Thread(() -> mmuOpt.startSimulation(""));
-		userThread = new Thread(() -> mmuUser.startSimulation(""));
+		//optThread = new Thread(() -> mmuOpt.startSimulation(""));
+		userThread = new Thread(() -> mmuUser.startSimulation(filename));
 
-		optThread.start();
+		//optThread.start();
 		userThread.start();
+
+		try {
+			userThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		/*try {
 			optThread.join();

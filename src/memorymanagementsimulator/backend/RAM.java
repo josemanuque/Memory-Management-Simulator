@@ -5,7 +5,7 @@ import java.util.List;
 
 public class RAM {
 
-	private final short pagesQuantity = 100;
+	private final short pagesQuantity = 3;
 	private ArrayList<Page> pages;
 	private boolean full;
 
@@ -14,13 +14,23 @@ public class RAM {
 		this.full = false;
 	}
 
-	public void addPages(ArrayList<Page> pages){
-		for (Page page : pages) {
-			if (!this.pages.contains(page)) {
-				this.pages.add(page);
-			}
+//	public void addPages(ArrayList<Page> pages){
+//		for (Page page : pages) {
+//			if (!this.pages.contains(page)) {
+//				this.pages.add(page);
+//			}
+//		}
+//	}
+
+	public void addPages(Page page){
+		if (!this.pages.contains(page)) {
+			this.pages.add(page);
 		}
 	}
+	public boolean isPageInRAM(Page page){
+		return this.pages.contains(page);
+	}
+
 
 	public short getPagesQuantity() {
 		return this.pagesQuantity;
@@ -35,7 +45,10 @@ public class RAM {
 	}
 
 	public boolean isFull() {
-		return full;
+		if (pagesQuantity == pages.size()){
+			return true;
+		}
+		return false;
 	}
 
 	public void setFull(boolean full) {
