@@ -16,7 +16,7 @@ public class Page {
 	public Page(int pageID) {
 		this.pageID = pageID;
 		this.loaded = false;
-		this.referenceBit = 0;
+		this.referenceBit = 1;
 		this.timestamp = 0;
 		setLoaded(false, "");
 	}
@@ -80,7 +80,11 @@ public class Page {
 		return timestamp;
 	}
 
-	public void updateTimestamp(long timestamp) {
+	public void updateTimestamp() {
 		this.timestamp = System.currentTimeMillis(); //usarlo en el use para actualizar tiempo de acceso
+	}
+
+	public void updateReferenceBit() {
+		this.referenceBit = 0;
 	}
 }

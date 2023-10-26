@@ -163,6 +163,21 @@ public class MMU {
 	public void use(int ptr) {
 		int spaceLeft = ram.pagesLeft();
 		ArrayList<Page> ptrPages = pagesInfo.get(ptr);
+
+		/*recorrer paginas que vienen y ver si ya están
+		si están, actualice tiempo y bit de referencia.
+		ES UN HIT
+
+		sino: ES UN FALLO
+		 ver si ram está llena o no
+	     * si está: agarro pag no cargadas y les aplico algoritmo
+	     * sino:
+	        veo si queda campo suficiente
+	        * si hay: agrego paginas a ram y cambio estado a cargadas
+	        * sino:
+	           agrego las que caben y las que no, aplico algoritmo
+		*/
+
 		if (!this.ram.isFull()){
 			if (spaceLeft >= ptrPages.size()){ // si hay campo
 				ram.addPages(ptrPages);
@@ -185,6 +200,9 @@ public class MMU {
 				for (Page page : pagesToReplace) {
 					if (!this.ram.getPages().contains(page)) {
 						runAlgorithm(algName, page);
+					}else{ //si contiene pag, actualiza tiempo y bit de referencia
+						page.updateTimestamp();
+						page.updateReferenceBit();
 					}
 				}
 				pagesToReplace.clear();
@@ -242,19 +260,18 @@ public class MMU {
 		}
 	}
 
-	public void fifoReplacement(Page page){
-		//implementar actualizacion de punteros?
+	public void fifoReplacement(Page newPage){
 		ArrayList<Page> pagesInRam = ram.getPages();
 
 		Page pageToReplace = pagesInRam.get(0);
 		pagesInRam.remove(pageToReplace);
+		pagesInRam.add(newPage);
 
 		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);
 	}
 
-	public void secondChanceReplacement(Page page){
-		//implementar actualizacion de punteros?
+	public void secondChanceReplacement(Page newPage){
 		Page pageToReplace = null;
 		ArrayList<Page> pagesInRam = ram.getPages();
 		boolean found = false;
@@ -271,13 +288,14 @@ public class MMU {
 				}
 			}
 		}
+		int pos = Integer.parseInt(pageToReplace.getLogicalAddress());
 		pagesInRam.remove(pageToReplace);
 		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);
+		pagesInRam.add(pos, newPage);
 	}
 
-	public void mruReplacement(Page page){
-		//implementar actualizacion de punteros?
+	public void mruReplacement(Page newPage){
 		ArrayList<Page> pagesInRam = ram.getPages();
 		Page pageToReplace = null;
 		long maxTimestamp = Long.MIN_VALUE;
@@ -288,13 +306,14 @@ public class MMU {
 				pageToReplace = p;
 			}
 		}
+		int pos = Integer.parseInt(pageToReplace.getLogicalAddress());
 		pagesInRam.remove(pageToReplace);
 		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);
+		pagesInRam.add(pos, newPage);
 	}
 
-	public void lruReplacement(Page page){
-		//implementar actualizacion de punteros?
+	public void lruReplacement(Page newPage){
 		ArrayList<Page> pagesInRam = ram.getPages();
 		Page pageToReplace = null;
 		long minTimestamp = Long.MAX_VALUE;
@@ -305,18 +324,20 @@ public class MMU {
 				pageToReplace = p;
 			}
 		}
+		int pos = Integer.parseInt(pageToReplace.getLogicalAddress());
 		pagesInRam.remove(pageToReplace);
 		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);
+		pagesInRam.add(pos, newPage);
 	}
 
-	public void randomReplacement(Page page){
-		//implementar actualizacion de punteros?
+	public void randomReplacement(Page newPage){
 		ArrayList<Page> pagesInRam = ram.getPages();
 
 		int randIndex = random.nextInt(pagesInRam.size());
 		Page pageToReplace = pagesInRam.get(randIndex);
 		pagesInRam.remove(pageToReplace);
+		pagesInRam.add(randIndex, newPage);
 
 		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);

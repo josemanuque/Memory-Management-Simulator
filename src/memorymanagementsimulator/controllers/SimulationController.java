@@ -1,27 +1,36 @@
 package memorymanagementsimulator.controllers;
 
+import memorymanagementsimulator.backend.MMU;
 import memorymanagementsimulator.frontend.*;
-
-import java.util.List;
 
 public class SimulationController {
 
 	//private WelcomeScreen welcomeScreen;
 	private SimulationWindow simulationWindow;
-	MMUController mmuController;
+	private MMU mmuOpt;
+	private MMU mmuUser;
+	private Thread optThread;
+	private Thread userThread;
+	private boolean isRunning = false;
+
+	public SimulationController(){
+		mmuOpt = new MMU("opt");
+		mmuUser = new MMU("");
+	}
 
 	public void startSimulation() {
-		// TODO - implement SimulationController.startSimulation
-		throw new UnsupportedOperationException();
-	}
+		this.isRunning = true;
+		optThread = new Thread(() -> mmuOpt.startSimulation(""));
+		userThread = new Thread(() -> mmuUser.startSimulation(""));
 
-	/**
-	 * 
-	 * @param algorithm
-	 */
-	public void setAlgorithm(int algorithm) {
-		// TODO - implement SimulationController.setAlgorithm
-		throw new UnsupportedOperationException();
-	}
+		optThread.start();
+		userThread.start();
 
+		/*try {
+			optThread.join();
+			userThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
+	}
 }
