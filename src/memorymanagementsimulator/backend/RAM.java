@@ -15,7 +15,11 @@ public class RAM {
 	}
 
 	public void addPages(ArrayList<Page> pages){
-		this.pages.addAll(pages);
+		for (Page page : pages) {
+			if (!this.pages.contains(page)) {
+				this.pages.add(page);
+			}
+		}
 	}
 
 	public short getPagesQuantity() {

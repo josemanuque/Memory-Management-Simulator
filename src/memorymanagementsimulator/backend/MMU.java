@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 public class MMU {
 	private ArrayList<Page> pagesInVirtualMemory;
+	private ArrayList<Page> pagesToReplace;
 	private RAM ram;
 	private List<Process> processes;
 	private Map<Integer, Process> symbolTable;
@@ -16,17 +17,20 @@ public class MMU {
 	private int ptrId;
 	private int pageId;
 	private Random random;
+	private String algName;
 
-	public MMU(){
+	public MMU(String algName){
 		this.ram = new RAM();
 		this.processes = new ArrayList<>();
+		this.pagesToReplace = new ArrayList<>();
 		this.symbolTable = new HashMap<>();
 		this.pagesInVirtualMemory = new ArrayList<>();
 		this.pagesInfo = new HashMap<>();
 		this.random = new Random();
+		this.algName = algName;
 	}
 
-	public static void startSimulation(String fileName) {
+	public void startSimulation(String fileName) {
 		try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -36,29 +40,33 @@ public class MMU {
 
 				if (matcher.find()) {
 					String keyword = matcher.group(1);
-					int pid = Integer.parseInt(matcher.group(2));
-					int value = 0; // Inicializamos value a 0
+					int firstParameter = Integer.parseInt(matcher.group(2));
+					int secondParameter = 0; // Inicializamos value a 0
 
 					if (matcher.group(3) != null) {
-						value = Integer.parseInt(matcher.group(3));
+						secondParameter = Integer.parseInt(matcher.group(3));
 					}
 
 					switch (keyword) {
 						case "new":
 							// Procesar una operación "new"
-							System.out.println("Operación 'new', pid: " + pid + ", value: " + value);
+							System.out.println("Operación 'new', pid: " + firstParameter + ", value: " + secondParameter);
+							newProcess(firstParameter,secondParameter);
 							break;
 						case "use":
 							// Procesar una operación "use"
-							System.out.println("Operación 'use', pid: " + pid);
+							System.out.println("Operación 'use', pid: " + firstParameter);
+							use(firstParameter);
 							break;
 						case "delete":
 							// Procesar una operación "delete"
-							System.out.println("Operación 'delete', pid: " + pid);
+							System.out.println("Operación 'delete', pid: " + firstParameter);
+							delete(firstParameter);
 							break;
 						case "kill":
 							// Procesar una operación "kill"
-							System.out.println("Operación 'kill', pid: " + pid);
+							System.out.println("Operación 'kill', pid: " + firstParameter);
+							kill(firstParameter);
 							break;
 						default:
 							// La línea no corresponde a una operación conocida
@@ -71,6 +79,23 @@ public class MMU {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void runAlgorithm(String name, Page page){
+		name.toLowerCase();
+		if (name == "opt"){
+
+		}if (name == "fifo"){
+			fifoReplacement(page);
+		}if (name == "lru"){
+			lruReplacement(page);
+		}if (name == "mru"){
+			mruReplacement(page);
+		}if (name == "secondchance"){
+			secondChanceReplacement(page);
+		}if (name == "random"){
+			randomReplacement(page);
 		}
 	}
 
@@ -92,7 +117,7 @@ public class MMU {
 		return null;
 	}
 
-	public int calculatePages(int size){
+	private int calculatePages(int size){
 		int numPages = size / 4000;
 		int remainder = size % 4000;
 		if (remainder != 0){
@@ -142,18 +167,27 @@ public class MMU {
 			if (spaceLeft >= ptrPages.size()){ // si hay campo
 				ram.addPages(ptrPages);
 				for (int i=0; i<ptrPages.size(); i++){
-					ptrPages.get(i).setLoaded(true);
+					ptrPages.get(i).setLoaded(true, String.valueOf(ram.getPages().size()-1));
 				}
 			} else {
 				ram.addPages((ArrayList<Page>) ptrPages.subList(0,spaceLeft));
 				for (int i=0; i<spaceLeft; i++){
-					ptrPages.get(i).setLoaded(true);
+					ptrPages.get(i).setLoaded(true, String.valueOf(ram.getPages().size()-1));
 				}
 			}
-		}
-		for (int i=0; i< ptrPages.size();i++){
-			if (!ptrPages.get(i).isLoaded()){
-				pagesInVirtualMemory.add(ptrPages.get(i));
+		} else {
+			for (int i=0; i< ptrPages.size();i++){
+				if (!ptrPages.get(i).isLoaded()){
+					pagesToReplace.add(ptrPages.get(i));
+				}
+			}
+			if (pagesToReplace.size()!=0){
+				for (Page page : pagesToReplace) {
+					if (!this.ram.getPages().contains(page)) {
+						runAlgorithm(algName, page);
+					}
+				}
+				pagesToReplace.clear();
 			}
 		}
 	}
@@ -208,18 +242,18 @@ public class MMU {
 		}
 	}
 
-	public void fifoReplacement(){
+	public void fifoReplacement(Page page){
 		//implementar actualizacion de punteros?
 		ArrayList<Page> pagesInRam = ram.getPages();
 
 		Page pageToReplace = pagesInRam.get(0);
 		pagesInRam.remove(pageToReplace);
 
-		pageToReplace.setLoaded(false);
+		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);
 	}
 
-	public void secondChanceReplacement(){
+	public void secondChanceReplacement(Page page){
 		//implementar actualizacion de punteros?
 		Page pageToReplace = null;
 		ArrayList<Page> pagesInRam = ram.getPages();
@@ -227,56 +261,56 @@ public class MMU {
 
 		while(!found) {
 			for (int i = 0; i < pagesInRam.size(); i++) {
-				Page page = pagesInRam.get(i);
-				if (page.getReferenceBit() == 0) {
-					pageToReplace = page;
+				Page p = pagesInRam.get(i);
+				if (p.getReferenceBit() == 0) {
+					pageToReplace = p;
 					found = true;
 					break;
 				} else {
-					page.setReferenceBit(0);
+					p.setReferenceBit(0);
 				}
 			}
 		}
 		pagesInRam.remove(pageToReplace);
-		pageToReplace.setLoaded(false);
+		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);
 	}
 
-	public void mruReplacement(){
+	public void mruReplacement(Page page){
 		//implementar actualizacion de punteros?
 		ArrayList<Page> pagesInRam = ram.getPages();
 		Page pageToReplace = null;
 		long maxTimestamp = Long.MIN_VALUE;
 
-		for(Page page : pagesInRam){
-			if(page.getTimestamp() > maxTimestamp){
-				maxTimestamp = page.getTimestamp();
-				pageToReplace = page;
+		for(Page p : pagesInRam){
+			if(p.getTimestamp() > maxTimestamp){
+				maxTimestamp = p.getTimestamp();
+				pageToReplace = p;
 			}
 		}
 		pagesInRam.remove(pageToReplace);
-		pageToReplace.setLoaded(false);
+		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);
 	}
 
-	public void lruReplacement(){
+	public void lruReplacement(Page page){
 		//implementar actualizacion de punteros?
 		ArrayList<Page> pagesInRam = ram.getPages();
 		Page pageToReplace = null;
 		long minTimestamp = Long.MAX_VALUE;
 
-		for(Page page : pagesInRam){
-			if(page.getTimestamp() < minTimestamp){
-				minTimestamp = page.getTimestamp();
-				pageToReplace = page;
+		for(Page p : pagesInRam){
+			if(p.getTimestamp() < minTimestamp){
+				minTimestamp = p.getTimestamp();
+				pageToReplace = p;
 			}
 		}
 		pagesInRam.remove(pageToReplace);
-		pageToReplace.setLoaded(false);
+		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);
 	}
 
-	public void randomReplacement(){
+	public void randomReplacement(Page page){
 		//implementar actualizacion de punteros?
 		ArrayList<Page> pagesInRam = ram.getPages();
 
@@ -284,7 +318,7 @@ public class MMU {
 		Page pageToReplace = pagesInRam.get(randIndex);
 		pagesInRam.remove(pageToReplace);
 
-		pageToReplace.setLoaded(false);
+		pageToReplace.setLoaded(false, "");
 		pagesInVirtualMemory.add(pageToReplace);
 	}
 }

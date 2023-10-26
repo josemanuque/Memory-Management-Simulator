@@ -16,9 +16,9 @@ public class Page {
 	public Page(int pageID) {
 		this.pageID = pageID;
 		this.loaded = false;
-		this.logicalAddress = generateRandomString(10);
 		this.referenceBit = 0;
 		this.timestamp = 0;
+		setLoaded(false, "");
 	}
 
 	private String generateRandomString(int length) {
@@ -46,9 +46,12 @@ public class Page {
 		return this.loaded;
 	}
 
-	public void setLoaded(boolean loaded) {
+	public void setLoaded(boolean loaded, String pos) {
 		if (loaded){
 			this.loadedTime = getCurrentTime();
+			this.logicalAddress = pos;
+		} else {
+			this.logicalAddress = generateRandomString(10);
 		}
 		this.loaded = loaded;
 	}
