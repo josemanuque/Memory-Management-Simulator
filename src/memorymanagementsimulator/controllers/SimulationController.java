@@ -1,33 +1,31 @@
 package memorymanagementsimulator.controllers;
 
-import memorymanagementsimulator.backend.MMU;
 import memorymanagementsimulator.frontend.*;
 
 public class SimulationController {
+	private OptMMUController optMmuController;
+	private AlgMMUController algMMUController;
 
 	//private WelcomeScreen welcomeScreen;
 	private SimulationWindow simulationWindow;
-	private MMU mmuOpt;
-	private MMU mmuUser;
 	private Thread optThread;
-	private Thread userThread;
+	private Thread algThread;
 	private boolean isRunning = false;
 
 	public SimulationController(){
-		//mmuOpt = new MMU("opt");
-		mmuUser = new MMU("fifo");
+
 	}
 
 	public void startSimulation(String filename) {
 		this.isRunning = true;
 		//optThread = new Thread(() -> mmuOpt.startSimulation(""));
-		userThread = new Thread(() -> mmuUser.startSimulation(filename));
+		algThread = new Thread(() -> algMMUController.startSimulation());
 
 		//optThread.start();
-		userThread.start();
+		algThread.start();
 
 		try {
-			userThread.join();
+			algThread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -39,4 +37,7 @@ public class SimulationController {
 			e.printStackTrace();
 		}*/
 	}
+
+
+
 }

@@ -19,6 +19,9 @@ public class Process {
 		return processID;
 	}
 
+	public Map<Integer, Integer> getPointers() {
+		return pointers;
+	}
 
 	/**
 	 * 

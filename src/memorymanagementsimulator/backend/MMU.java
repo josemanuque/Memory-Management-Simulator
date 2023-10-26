@@ -1,5 +1,6 @@
 package memorymanagementsimulator.backend;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,319 +9,105 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MMU {
-	private ArrayList<Page> pagesInVirtualMemory;
-	private ArrayList<Page> pagesToReplace;
-	private RAM ram;
-	private List<Process> processes;
-	private Map<Integer, Process> symbolTable;
-	private Map<Integer, ArrayList<Page>> pagesInfo; //Pointers relation with pages
-	private int ptrId;
-	private int pageId;
-	private Random random;
-	private String algName;
+    List<Process> processes;
+    List<Page> pages;
+    Map<Integer, List<Page>> pointersPages; // Links the pages associated with each pointer.
+    Map<Integer, Process> symbolTable; // Links each pointer with its process for ease of access.
+    List<Page> pagesInVRam;
+    RAM ram;
+    public MMU(){
+        this.processes = new ArrayList<Process>();
+        this.pages = new ArrayList<Page>();
+        this.ram = new RAM();
+        this.pointersPages = new HashMap<>();
+        this.symbolTable = new HashMap<>();
+        this.pagesInVRam = new ArrayList<>();
+    }
 
-	public MMU(String algName){
-		this.ram = new RAM();
-		this.processes = new ArrayList<>();
-		this.pagesToReplace = new ArrayList<>();
-		this.symbolTable = new HashMap<>();
-		this.pagesInVirtualMemory = new ArrayList<>();
-		this.pagesInfo = new HashMap<>();
-		this.random = new Random();
-		this.algName = algName;
-	}
+    public List<Process> getProcesses() {
+        return processes;
+    }
 
-	public void startSimulation(String fileName) {
-		try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				// Utilizamos expresiones regulares para extraer las partes clave y valores
-				Pattern pattern = Pattern.compile("(new|use|delete|kill)\\((\\d+)(?:,(\\d+))?\\)");
-				Matcher matcher = pattern.matcher(line);
+    public void addProcess(Process process) {
+        this.processes.add(process);
+    }
 
-				if (matcher.find()) {
-					String keyword = matcher.group(1);
-					int firstParameter = Integer.parseInt(matcher.group(2));
-					int secondParameter = 0; // Inicializamos value a 0
+    public List<Page> getPages() {
+        return pages;
+    }
 
-					if (matcher.group(3) != null) {
-						secondParameter = Integer.parseInt(matcher.group(3));
-					}
+    public void addPage(Page page) {
+        this.pages.add(page);
+    }
 
-					switch (keyword) {
-						case "new":
-							// Procesar una operación "new"
-							System.out.println("Operación 'new', pid: " + firstParameter + ", value: " + secondParameter);
-							newProcess(firstParameter,secondParameter);
-							break;
-						case "use":
-							// Procesar una operación "use"
-							System.out.println("Operación 'use', pid: " + firstParameter);
-							use(firstParameter);
-							break;
-						case "delete":
-							// Procesar una operación "delete"
-							System.out.println("Operación 'delete', pid: " + firstParameter);
-							delete(firstParameter);
-							break;
-						case "kill":
-							// Procesar una operación "kill"
-							System.out.println("Operación 'kill', pid: " + firstParameter);
-							kill(firstParameter);
-							break;
-						default:
-							// La línea no corresponde a una operación conocida
-							System.out.println("Línea no reconocida: " + line);
-					}
-				} else {
-					// La línea no tiene el formato esperado
-					System.out.println("Línea mal formateada: " + line);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public Map<Integer, List<Page>> getPointersPages() {
+        return pointersPages;
+    }
 
-	private void runAlgorithm(String name, Page page){
-		name.toLowerCase();
-		if (name == "opt"){
+    public void addToPointersPages(int pointerID, List<Page> pages) {
+        this.pointersPages.put(pointerID, pages);
+    }
 
-		}if (name == "fifo"){
-			fifoReplacement(page);
-		}if (name == "lru"){
-			lruReplacement(page);
-		}if (name == "mru"){
-			mruReplacement(page);
-		}if (name == "secondchance"){
-			secondChanceReplacement(page);
-		}if (name == "random"){
-			randomReplacement(page);
-		}
-	}
+    public Map<Integer, Process> getSymbolTable() {
+        return symbolTable;
+    }
 
-	private boolean processExist(int processId){
-		for (int i = 0; i<processes.size(); i++){
-			if (processId == processes.get(i).getProcessID()){
-				return true;
-			}
-		}
-		return false;
-	}
+    public void addToSymbolTable(int pointerID, Process process) {
+        this.symbolTable.put(pointerID, process);
+    }
 
-	private Process findProcess(int pId){
-		for (int i=0; i<processes.size(); i++){
-			if (processes.get(i).getProcessID() == pId){
-				return processes.get(i);
-			}
-		}
-		return null;
-	}
+    public RAM getRam() {
+        return ram;
+    }
 
-	private int calculatePages(int size){
-		int numPages = size / 4000;
-		int remainder = size % 4000;
-		if (remainder != 0){
-			numPages+=1;
-			return numPages;
-		}
-		return numPages;
-	}
+    public void setPageInRam(int index, Page page) {
+        this.ram.setPage(index, page);
+    }
 
+    public int getHowManyPages(int size){
+        int numPages = size / 4000;
+        int remainder = size % 4000;
+        if (remainder != 0){
+            numPages+=1;
+            return numPages;
+        }
+        return numPages;
+    }
 
-	/**
-	 * 
-	 * @param processId
-	 * @param size
-	 */
-	public int newProcess(int processId, int size) {
-		ptrId += 1;
-		int numberOfPages = calculatePages(size);
-		ArrayList<Page> processPages = new ArrayList<>();
-		for (int i=0; i<numberOfPages; i++){
-			pageId +=1;
-			Page page = new Page(pageId);
-			processPages.add(page);
-		}
-		if (processExist(processId)){
-			symbolTable.get(processId).addPointer(ptrId,size);
-			Process process = symbolTable.get(processId);
-			symbolTable.put(ptrId,process);
-		} else {
-			Process process = new Process(processId, ptrId, size);
-			processes.add(process);
-			symbolTable.put(ptrId,process);
-		}
-		pagesInfo.put(ptrId,processPages);
-		use(ptrId);
-		return ptrId;
-	}
+    public Process findProcess(int processID){
+        for(Process process : processes){
+            if (processID == process.getProcessID())
+                return process;
+        }
+        return null;
+    }
 
+    public boolean arePagesInVRam(int pointerID){
+        List<Page> pages = getPointersPages().get(pointerID);
+        for (Page page : pages){
+            if (page.isLoaded()){
+                return false;
+            }
+        }
+        return true;
+    }
 
+    public void rearrangePagesRowIndex(int index){
+        for(int i = index + 1; i < pages.size(); i++){
+            Page page = pages.get(i);
+            page.setRowIndex(page.getRowIndex() - 1);
+            System.out.println(page.getRowIndex());
+        }
+    }
 
-	/**
-	 * 
-	 * @param ptr
-	 */
-	public void use(int ptr) {
-		int spaceLeft = ram.pagesLeft();
-		ArrayList<Page> ptrPages = pagesInfo.get(ptr);
+    public void addPageToVRam(Page page){
+        pagesInVRam.add(page);
+    }
 
-		for (Page page : ptrPages) {
-			if (!page.isLoaded()){
-				if (!this.ram.isFull()){
-					if (spaceLeft >= ptrPages.size()){
-						ram.addPages(page);
-						page.setLoaded(true, String.valueOf(ram.getPages().size()-1));
-					} else {
-						ArrayList<Page> pagesToAllocate = (ArrayList<Page>) ptrPages.subList(0,spaceLeft);
-						for (int i=0; i<spaceLeft; i++){
-							ram.addPages(pagesToAllocate.get(i));
-							ptrPages.get(i).setLoaded(true, String.valueOf(ram.getPages().size()-1));
-						}
-					}
-				} else {
-					runAlgorithm(algName, page);
-				}
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * @param ptr
-	 */
-	public void delete(int ptr) {
-		//Pages to delete
-		ArrayList<Page> pagesToDelete = pagesInfo.get(ptr);
-		ArrayList<Page> pagesInRAM = ram.getPages();
-
-		for (int i=0; i<pagesToDelete.size(); i++){
-			Page page = pagesToDelete.get(i); //page to delete
-			for (int j=0; j<pagesInRAM.size();j++){
-				Page ramPage = pagesInRAM.get(j); //page to see if it needs to be deleted
-				if (page.equals(ramPage)){ //if they are the same the page is deleted
-					ram.getPages().remove(ramPage);
-				}
-			}
-		}
-
-		// Use retainAll to find and remove common elements
-		//pagesInRAM.retainAll(pagesToDelete);
-		//pagesToDelete.retainAll(pagesInRAM);
-		for (Page page: pagesToDelete){
-			if (pagesInVirtualMemory.contains(page)){
-				pagesInVirtualMemory.remove(page);
-			}
-		}
-		pagesInfo.remove(ptr);
-		symbolTable.remove(ptr);
-	}
-
-	/**
-	 * 
-	 * @param processId
-	 */
-	public void kill(int processId) {
-		Process processToDelete = findProcess(processId);
-		Map<Integer, Process> pairToDelete = new HashMap<>();
-		for (Map.Entry<Integer, Process> entry : symbolTable.entrySet()) {
-			if (entry.getValue().equals(processToDelete)) {
-				pairToDelete.put(entry.getKey(),entry.getValue());
-			}
-		}
-
-		for (Integer key : pairToDelete.keySet()) {
-			symbolTable.remove(key);
-		}
-		for(int i=0; i< processes.size(); i++){
-			if (processes.get(i).getProcessID() == processId){
-				processes.remove(processes.get(i));
-			}
-		}
-	}
-
-	public void fifoReplacement(Page newPage){
-		ArrayList<Page> pagesInRam = ram.getPages();
-
-		Page pageToReplace = pagesInRam.get(0);
-		pagesInRam.remove(pageToReplace);
-		pagesInRam.add(newPage);
-		newPage.setLoaded(true, String.valueOf(ram.getPages().size()));
-
-		pageToReplace.setLoaded(false, "");
-		pagesInVirtualMemory.add(pageToReplace);
-	}
-
-	public void secondChanceReplacement(Page newPage){
-		Page pageToReplace = null;
-		ArrayList<Page> pagesInRam = ram.getPages();
-		boolean found = false;
-
-		while(!found) {
-			for (int i = 0; i < pagesInRam.size(); i++) {
-				Page p = pagesInRam.get(i);
-				if (p.getReferenceBit() == 0) {
-					pageToReplace = p;
-					found = true;
-					break;
-				} else {
-					p.setReferenceBit(0);
-				}
-			}
-		}
-		int pos = Integer.parseInt(pageToReplace.getLogicalAddress());
-		pagesInRam.remove(pageToReplace);
-		pageToReplace.setLoaded(false, "");
-		pagesInVirtualMemory.add(pageToReplace);
-		pagesInRam.add(pos, newPage);
-	}
-
-	public void mruReplacement(Page newPage){
-		ArrayList<Page> pagesInRam = ram.getPages();
-		Page pageToReplace = null;
-		long maxTimestamp = Long.MIN_VALUE;
-
-		for(Page p : pagesInRam){
-			if(p.getTimestamp() > maxTimestamp){
-				maxTimestamp = p.getTimestamp();
-				pageToReplace = p;
-			}
-		}
-		int pos = Integer.parseInt(pageToReplace.getLogicalAddress());
-		pagesInRam.remove(pageToReplace);
-		pageToReplace.setLoaded(false, "");
-		pagesInVirtualMemory.add(pageToReplace);
-		pagesInRam.add(pos, newPage);
-	}
-
-	public void lruReplacement(Page newPage){
-		ArrayList<Page> pagesInRam = ram.getPages();
-		Page pageToReplace = null;
-		long minTimestamp = Long.MAX_VALUE;
-
-		for(Page p : pagesInRam){
-			if(p.getTimestamp() < minTimestamp){
-				minTimestamp = p.getTimestamp();
-				pageToReplace = p;
-			}
-		}
-		int pos = Integer.parseInt(pageToReplace.getLogicalAddress());
-		pagesInRam.remove(pageToReplace);
-		pageToReplace.setLoaded(false, "");
-		pagesInVirtualMemory.add(pageToReplace);
-		pagesInRam.add(pos, newPage);
-	}
-
-	public void randomReplacement(Page newPage){
-		ArrayList<Page> pagesInRam = ram.getPages();
-
-		int randIndex = random.nextInt(pagesInRam.size());
-		Page pageToReplace = pagesInRam.get(randIndex);
-		pagesInRam.remove(pageToReplace);
-		pagesInRam.add(randIndex, newPage);
-
-		pageToReplace.setLoaded(false, "");
-		pagesInVirtualMemory.add(pageToReplace);
-	}
+    public int getPagesInVRamQuantity(){
+        return pagesInVRam.size();
+    }
+    public List<Page> getPagesInVRam(){
+        return this.pagesInVRam;
+    }
 }

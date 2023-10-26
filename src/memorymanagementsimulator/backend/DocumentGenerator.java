@@ -8,7 +8,7 @@ import java.util.Random;
 public class DocumentGenerator {
 
     public static void generateDocument(int lines) {
-        try (FileWriter writer = new FileWriter("instructions.txt")) {
+        try (FileWriter writer = new FileWriter("minimalInstructions.txt")) {
             int pidCounter = 1;
             int ptrCounter = 1;
             ArrayList<Integer> activePids = new ArrayList<Integer>();
@@ -42,7 +42,7 @@ public class DocumentGenerator {
     }
 
     public static void generateDocument2(int lines) {
-        try (FileWriter writer = new FileWriter("instructions.txt")) {
+        try (FileWriter writer = new FileWriter("minimalInstructions.txt")) {
             int pidCounter = 1;
             Random random = new Random();
             boolean[] pidsInUse = new boolean[lines]; // Utilizamos un arreglo para llevar un seguimiento de los pids en uso

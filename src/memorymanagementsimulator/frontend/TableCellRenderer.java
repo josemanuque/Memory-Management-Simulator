@@ -48,5 +48,16 @@ public class TableCellRenderer  extends DefaultTableCellRenderer {
     
     public void removeRowColor(int rowIndex){
         rowColors.remove(rowIndex);
+        // Ajustar índices después de eliminar una fila
+        Map<Integer, Color> updatedRowColors = new HashMap<>();
+        rowColors.forEach((index, color) -> {
+            if (index > rowIndex) {
+                updatedRowColors.put(index - 1, color);
+            } else {
+                updatedRowColors.put(index, color);
+            }
+        });
+        rowColors.clear();
+        rowColors.putAll(updatedRowColors);
     }
 }

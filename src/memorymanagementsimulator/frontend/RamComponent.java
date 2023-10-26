@@ -8,11 +8,13 @@ import java.util.Random;
 
 public class RamComponent {
     int pageQuantity;
+    JPanel panel;
     private List<PageComponent> pageComponents;
     public RamComponent(JPanel panel){
         pageComponents = new ArrayList<>();
         this.pageQuantity = 100;
-        initRam(panel);
+        this.panel = panel;
+        initRam(this.panel);
     }
 
     private void initRam(JPanel panel){
@@ -39,6 +41,7 @@ public class RamComponent {
             throw new RuntimeException("Index size is more than ram size");
         }
         pageComponents.get(index).setColor(c);
+        this.panel.repaint();
     }
     public List<PageComponent> getPageComponents() {
         return pageComponents;

@@ -4,10 +4,10 @@
  */
 package memorymanagementsimulator.frontend;
 
+import memorymanagementsimulator.controllers.AlgMMUController;
+import memorymanagementsimulator.controllers.OptMMUController;
+
 import java.awt.Color;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,16 +16,29 @@ import javax.swing.table.DefaultTableModel;
 public class SimulationWindow extends javax.swing.JFrame {
     private RamComponent optRam;
     private RamComponent algRam;
-    
+    private OptMMUController optMmuController;
+    private AlgMMUController algMmuController;
+
     /**
      * Creates new form SimulationWindow
      */
     public SimulationWindow() {
         initComponents();
-        addRowsTest();
+        //addRowsTest();
         setRams();
+        optMmuController = new OptMMUController(optTable, optRam);
+        algMmuController = new AlgMMUController(algTable, algRam, 0);
+        //startSimulationOptTest();
     }
 
+    public void startSimulationOptTest(){
+        optMmuController.startSimulationOPT();
+        algMmuController.setProcessColor(optMmuController.getProcessColor());
+    }
+
+    public void startSimulationAlgTest(){
+        algMmuController.startSimulation();
+    }
     private void setRams(){
         optRam = new RamComponent(jPanelOPT);
         algRam = new RamComponent(jPanelAlg);

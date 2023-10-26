@@ -5,54 +5,51 @@ import java.util.List;
 
 public class RAM {
 
-	private final short pagesQuantity = 3;
-	private ArrayList<Page> pages;
-	private boolean full;
+	private final short pagesQuantity = 5;
+	private Page[] pages;
+	private int pagesSize;
 
 	public RAM() {
-		this.pages = new ArrayList<>();
-		this.full = false;
+		this.pages = new Page[pagesQuantity];
 	}
-
-//	public void addPages(ArrayList<Page> pages){
-//		for (Page page : pages) {
-//			if (!this.pages.contains(page)) {
-//				this.pages.add(page);
-//			}
-//		}
-//	}
-
-	public void addPages(Page page){
-		if (!this.pages.contains(page)) {
-			this.pages.add(page);
-		}
-	}
-	public boolean isPageInRAM(Page page){
-		return this.pages.contains(page);
-	}
-
 
 	public short getPagesQuantity() {
-		return this.pagesQuantity;
+		return pagesQuantity;
 	}
 
-	public int pagesLeft(){
-		return this.pagesQuantity-this.pages.size();
+	public Page[] getPages() {
+		return pages;
 	}
 
-	public ArrayList<Page> getPages() {
-		return this.pages;
+	public void setPage(int index, Page page) {
+		this.pages[index] = page;
+	}
+
+	public void removePage(int index){
+		this.pages[index] = null;
+	}
+	public int addToEmptySpace(Page page){
+		for(int i = 0; i < pagesQuantity; i++){
+			if (pages[i] == null) {
+				pages[i] = page;
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public boolean isFull() {
-		if (pagesQuantity == pages.size()){
-			return true;
+		return getFreeSpacesSize() == 0;
+	}
+
+
+
+	public int getFreeSpacesSize(){
+		int freeCount = 0;
+		for(int i = 0; i < pagesQuantity; i++){
+			if (pages[i] == null)
+				freeCount++;
 		}
-		return false;
+		return pagesQuantity - freeCount;
 	}
-
-	public void setFull(boolean full) {
-		this.full = full;
-	}
-
 }

@@ -39,7 +39,33 @@ public class TableMMU extends JTable{
         // Actualizar la tabla para reflejar los cambios
         this.repaint();
     }
-    
+
+    public void updateRow(int rowIndex, Object[] newData) {
+        // Asegurarse de que el índice sea válido
+        if (rowIndex < 0 || rowIndex >= model.getRowCount()) {
+            throw new IndexOutOfBoundsException("Índice de fila inválido: " + rowIndex);
+        }
+
+        // Actualizar los datos en el modelo de la tabla
+        for (int i = 0; i < newData.length; i++) {
+            model.setValueAt(newData[i], rowIndex, i);
+        }
+
+        // Actualizar la tabla para reflejar los cambios
+        this.repaint();
+    }
+
+    public void updateRow(int rowIndex, int columnIndex, Object newData) {
+        // Asegurarse de que el índice sea válido
+        if (rowIndex < 0 || rowIndex >= model.getRowCount()) {
+            throw new IndexOutOfBoundsException("Índice de fila inválido: " + rowIndex);
+        }
+
+        model.setValueAt(newData, rowIndex, columnIndex);
+
+        // Actualizar la tabla para reflejar los cambios
+        this.repaint();
+    }
     public void deleteRow(int rowIndex){
         tableCellRenderer.removeRowColor(rowIndex);
         model.removeRow(rowIndex);

@@ -4,6 +4,8 @@
  */
 package memorymanagementsimulator;
 
+import memorymanagementsimulator.frontend.SimulationWindow;
+
 /**
  *
  * @author josemanuque
@@ -14,7 +16,10 @@ public class MemoryManagementSimulator {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        SimulationWindow simulationWindow = new SimulationWindow();
+        simulationWindow.setVisible(true);
+        simulationWindow.startSimulationOptTest();
+        simulationWindow.startSimulationAlgTest();
     }
     
 }

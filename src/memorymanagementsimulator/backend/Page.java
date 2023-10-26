@@ -12,13 +12,17 @@ public class Page {
 	private final int size = 4; //4KB
 	private int referenceBit;
 	private long timestamp;
+	private int ramAddress = -1;
+	private int vRamAddress = -1;
+	private int rowIndex = -1;
 
-	public Page(int pageID) {
+	public Page(int pageID, int rowIndex) {
 		this.pageID = pageID;
 		this.loaded = false;
-		this.referenceBit = 1;
+		this.logicalAddress = generateRandomString(10);
+		this.referenceBit = 0;
 		this.timestamp = 0;
-		setLoaded(false, "");
+		this.rowIndex = rowIndex;
 	}
 
 	private String generateRandomString(int length) {
@@ -46,12 +50,9 @@ public class Page {
 		return this.loaded;
 	}
 
-	public void setLoaded(boolean loaded, String pos) {
+	public void setLoaded(boolean loaded) {
 		if (loaded){
 			this.loadedTime = getCurrentTime();
-			this.logicalAddress = pos;
-		} else {
-			this.logicalAddress = generateRandomString(10);
 		}
 		this.loaded = loaded;
 	}
@@ -80,11 +81,31 @@ public class Page {
 		return timestamp;
 	}
 
-	public void updateTimestamp() {
+	public void updateTimestamp(long timestamp) {
 		this.timestamp = System.currentTimeMillis(); //usarlo en el use para actualizar tiempo de acceso
 	}
 
-	public void updateReferenceBit() {
-		this.referenceBit = 0;
+	public int getRamAddress() {
+		return ramAddress;
+	}
+
+	public void setRamAddress(int ramAddress) {
+		this.ramAddress = ramAddress;
+	}
+
+	public int getRowIndex() {
+		return rowIndex;
+	}
+
+	public void setRowIndex(int rowIndex) {
+		this.rowIndex = rowIndex;
+	}
+
+	public int getVRamAddress() {
+		return vRamAddress;
+	}
+
+	public void setVRamAddress(int vRamAddress) {
+		this.vRamAddress = vRamAddress;
 	}
 }
