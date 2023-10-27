@@ -104,6 +104,12 @@ public class OptMMUController {
 					// La línea no tiene el formato esperado
 					System.out.println("Línea mal formateada: " + line);
 				}
+                            try {
+                                // Sleep por 2 segundos (2000 milisegundos)
+                                Thread.sleep(3000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

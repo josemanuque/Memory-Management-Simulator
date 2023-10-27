@@ -8,6 +8,7 @@ import memorymanagementsimulator.controllers.AlgMMUController;
 import memorymanagementsimulator.controllers.OptMMUController;
 
 import java.awt.Color;
+import javax.swing.JLabel;
 
 /**
  *
@@ -27,9 +28,10 @@ public class SimulationWindow extends javax.swing.JFrame {
         //addRowsTest();
         setRams();
         optMmuController = new OptMMUController(optTable, optRam);
-        algMmuController = new AlgMMUController(algTable, algRam, 0);
+        algMmuController = new AlgMMUController(algTable, algRam, "FIFO");
         //startSimulationOptTest();
     }
+    
 
     public void startSimulationOptTest(){
         optMmuController.startSimulationOPT();
@@ -71,6 +73,24 @@ public class SimulationWindow extends javax.swing.JFrame {
         return optTable;
     }
 
+    public JLabel getLblTitleOpt() {
+        return labelAlg;
+    }
+
+    public void setLblTitleOpt(JLabel labelAlg) {
+        this.labelAlg = labelAlg;
+    }
+
+    public JLabel getLblTitleAlg() {
+        return labelAlg1;
+    }
+
+    public void setLblTitleAlg(JLabel labelAlg1) {
+        this.labelAlg1 = labelAlg1;
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

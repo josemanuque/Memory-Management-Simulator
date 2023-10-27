@@ -4,6 +4,7 @@
  */
 package memorymanagementsimulator;
 
+import memorymanagementsimulator.controllers.SimulationController;
 import memorymanagementsimulator.frontend.SimulationWindow;
 
 /**
@@ -16,10 +17,11 @@ public class MemoryManagementSimulator {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        SimulationWindow simulationWindow = new SimulationWindow();
-        simulationWindow.setVisible(true);
-        simulationWindow.startSimulationOptTest();
-        simulationWindow.startSimulationAlgTest();
+//        SimulationWindow simulationWindow = new SimulationWindow();
+//        simulationWindow.setVisible(true);
+//        simulationWindow.startSimulationOptTest();
+//        simulationWindow.startSimulationAlgTest();
+        SimulationController simulationController = new SimulationController();
     }
     
 }

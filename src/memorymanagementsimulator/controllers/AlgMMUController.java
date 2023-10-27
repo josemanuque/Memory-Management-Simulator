@@ -27,9 +27,9 @@ public class AlgMMUController {
     private String fileName = "instructions/minimalInstructions.txt";
     private TableMMU tableMMU;
     private  RamComponent ramComponent;
-    private int selectedAlgorithm = -1;
+    private String selectedAlgorithm;
 
-    public AlgMMUController(TableMMU tableMMU, RamComponent ramComponent, int selectedAlgorithm){
+    public AlgMMUController(TableMMU tableMMU, RamComponent ramComponent, String selectedAlgorithm){
         this.tableMMU = tableMMU;
         this.ramComponent = ramComponent;
         this.selectedAlgorithm = selectedAlgorithm;
@@ -104,6 +104,12 @@ public class AlgMMUController {
                     // La línea no tiene el formato esperado
                     System.out.println("Línea mal formateada: " + line);
                 }
+            try {
+                // Sleep por 2 segundos (2000 milisegundos)
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -257,23 +263,23 @@ public class AlgMMUController {
     public Page algorithmRouter(){
         Page pageToReplace = null;
         switch (this.selectedAlgorithm){
-            case 0: // FIFO
+            case "FIFO": // FIFO
                 pageToReplace = fifoReplacement();
                 break;
-            case 1: // SC
+            case "Second Chance": // SC
                 pageToReplace = secondChanceReplacement();
                 break;
-            case 2: //
+            case "MRU": //
                 pageToReplace = mruReplacement();
                 break;
-            case 3:
+            case "LRU":
                 pageToReplace = lruReplacement();
                 break;
-            case 4:
+            case "RND":
                 pageToReplace = randomReplacement();
                 break;
             default:
-                throw new RuntimeException("Invalid algorithm number");
+                throw new RuntimeException("Invalid algorithm name");
         }
         return pageToReplace;
     }
