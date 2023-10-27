@@ -28,6 +28,8 @@ public class OptMMUController {
 	private TableMMU tableMMU;
 	private  RamComponent ramComponent;
 	private int selectedAlgorithm;
+	private int clock = 0;
+	private int thrashing = 0;
 
 	public OptMMUController(TableMMU tableMMU, RamComponent ramComponent){
 		this.tableMMU = tableMMU;
@@ -159,6 +161,8 @@ public class OptMMUController {
 					updateCell(pageToReplace.getRowIndex(), 5, pageToReplace.getVRamAddress());
 					ramAddress = pageToReplace.getRamAddress();
 					vRamSequence++;
+					clock += 5;
+					thrashing += 5;
 				}
 				page.setRamAddress(ramAddress);
 				page.setLoaded(true);
@@ -176,6 +180,8 @@ public class OptMMUController {
 				Color c = processColor.get(processID);
 				joinRow(obj, c);
 				updateRamDisplay(page, c);
+			}else {
+				clock += 1;
 			}
 		}
 
@@ -201,6 +207,8 @@ public class OptMMUController {
 					updateCell(pageToReplace.getRowIndex(), 5, pageToReplace.getVRamAddress());
 					ramAddress = pageToReplace.getRamAddress();
 					vRamSequence++;
+					clock += 5;
+					thrashing += 5;
 				}
 				page.setRamAddress(ramAddress);
 				page.setLoaded(true);
@@ -218,10 +226,10 @@ public class OptMMUController {
 				Color c = processColor.get(processID);
 				updateRow(page.getRowIndex(), obj);
 				updateRamDisplay(page, c);
+			}else{
+				clock += 1;
 			}
 		}
-
-
 	}
 
 	public void delete(int pointer){
@@ -410,5 +418,17 @@ public class OptMMUController {
 
 	public void updateRamDisplay(Page page, Color c){
 		ramComponent.setPageColor(page.getRamAddress(), c);
+	}
+
+	public int getClock() {
+		return clock;
+	}
+
+	public int getThrashing() {
+		return thrashing;
+	}
+
+	public double thrashingPercentage(){
+		return (double) thrashing / clock * 100;
 	}
 }

@@ -108,4 +108,5 @@ public class Page {
 	public void setVRamAddress(int vRamAddress) {
 		this.vRamAddress = vRamAddress;
 	}
+
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class RAM {
 
-	private final short pagesQuantity = 5;
+	private final short pagesQuantity = 100;
 	private Page[] pages;
 	private int pagesSize;
 
