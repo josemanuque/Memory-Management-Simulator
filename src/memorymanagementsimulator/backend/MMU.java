@@ -110,4 +110,48 @@ public class MMU {
     public List<Page> getPagesInVRam(){
         return this.pagesInVRam;
     }
+
+    public int ramUsageKB(){
+        int usedRam = 0;
+        for (Page page : ram.getPages()){
+            if(page != null && page.isLoaded()){
+                usedRam++;
+            }
+        }
+        return usedRam * 4;
+    }
+
+    public double RamUsagePercentage(){
+        int totalRamPages = ram.getPagesQuantity() ;
+        int usedRamPages = ramUsageKB();
+        double ramUsagePercentage = (double) usedRamPages / (totalRamPages * 4) * 100;
+
+        return ramUsagePercentage;
+    }
+
+    public int getRunningProcesses(){
+        int count = 0;
+        for(Process p : processes){
+            if(!getPointersPages().get(p.getProcessID()).isEmpty()){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int VRamUsageKB(){
+        int usedRam = 0;
+        for (int i = 0; i < pagesInVRam.size(); i++){
+            usedRam++;
+        }
+        return usedRam * 4;
+    }
+
+    public double VRamUsagePercentage(){
+        int totalRamSize= ram.getPagesQuantity() * 4;
+        int VRamSize = VRamUsageKB();
+        double VRamUsagePercentage = (double) VRamSize / totalRamSize * 100;
+
+        return VRamUsagePercentage;
+    }
 }
