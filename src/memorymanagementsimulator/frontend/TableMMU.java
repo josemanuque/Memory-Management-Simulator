@@ -5,7 +5,7 @@
 package memorymanagementsimulator.frontend;
 
 import java.awt.Color;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -22,7 +22,7 @@ public class TableMMU extends JTable{
         this.setDefaultRenderer(Object.class, tableCellRenderer);
         setModel(this.model);
         String [] columnNames = {"Page ID", "PID", "Loaded", "L-Addr", "M-Addr", "D-Addr", "Loaded-T", "Mark"};
-        this.model.setColumnIdentifiers(columnNames);
+        model.setColumnIdentifiers(columnNames);
     }
     
     public void addRow(Object[] rowData, Color c){
@@ -52,7 +52,7 @@ public class TableMMU extends JTable{
         }
 
         // Actualizar la tabla para reflejar los cambios
-        this.repaint();
+        //this.repaint();
     }
 
     public void updateRow(int rowIndex, int columnIndex, Object newData) {
@@ -64,10 +64,24 @@ public class TableMMU extends JTable{
         model.setValueAt(newData, rowIndex, columnIndex);
 
         // Actualizar la tabla para reflejar los cambios
-        this.repaint();
+        //this.repaint();
     }
     public void deleteRow(int rowIndex){
-        tableCellRenderer.removeRowColor(rowIndex);
-        model.removeRow(rowIndex);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                if (rowIndex < 0 || rowIndex >= model.getRowCount()) {
+                    throw new IndexOutOfBoundsException("Índice de fila inválido: " + rowIndex);
+                }
+
+                // Remover el color asociado a la fila
+                tableCellRenderer.removeRowColor(rowIndex);
+
+                // Eliminar la fila del modelo
+                model.removeRow(rowIndex);
+
+                // Actualizar la tabla para reflejar los cambios
+                TableMMU.this.repaint();
+            }
+        });
     }
 }

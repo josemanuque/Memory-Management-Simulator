@@ -93,7 +93,7 @@ public class MMU {
     }
 
     public void rearrangePagesRowIndex(int index){
-        for(int i = index + 1; i < pages.size(); i++){
+        for(int i = index; i < pages.size(); i++){
             Page page = pages.get(i);
             page.setRowIndex(page.getRowIndex() - 1);
             System.out.println(page.getRowIndex());
@@ -153,5 +153,22 @@ public class MMU {
         double VRamUsagePercentage = (double) VRamSize / totalRamSize * 100;
 
         return VRamUsagePercentage;
+    }
+
+    public float calculateInternalFragmentation(){
+        float totalFragmentation = 0;
+
+        for (Process process : getProcesses()){
+            int processSize = process.getSize();
+            float pagesForProcess = getHowManyPages(processSize);
+            float spaceAssigned = pagesForProcess * 4;
+            float processSizeKb = ((float) processSize) / 1024;
+
+            float internalFragmentation = spaceAssigned - (processSizeKb);
+            if (internalFragmentation > 0) {
+                totalFragmentation += internalFragmentation;
+            }
+        }
+        return totalFragmentation;
     }
 }

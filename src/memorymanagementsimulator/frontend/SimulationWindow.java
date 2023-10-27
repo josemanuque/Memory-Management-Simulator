@@ -8,7 +8,7 @@ import memorymanagementsimulator.controllers.AlgMMUController;
 import memorymanagementsimulator.controllers.OptMMUController;
 
 import java.awt.Color;
-import javax.swing.JLabel;
+import javax.swing.*;
 
 /**
  *
@@ -27,8 +27,8 @@ public class SimulationWindow extends javax.swing.JFrame {
         initComponents();
         //addRowsTest();
         setRams();
-        optMmuController = new OptMMUController(optTable, optRam);
-        algMmuController = new AlgMMUController(algTable, algRam, "FIFO");
+        //optMmuController = new OptMMUController(optTable, optRam);
+        //algMmuController = new AlgMMUController(algTable, algRam, "FIFO");
         //startSimulationOptTest();
     }
     
@@ -74,30 +74,244 @@ public class SimulationWindow extends javax.swing.JFrame {
     }
 
     public JLabel getLblTitleOpt() {
-        return labelAlg;
+        return labelOpt;
     }
 
-    public void setLblTitleOpt(JLabel labelAlg) {
-        this.labelAlg = labelAlg;
+    public void setLblTitleOpt(JLabel labelOpt) {
+        this.labelOpt = labelOpt;
     }
 
     public JLabel getLblTitleAlg() {
-        return labelAlg1;
+        return labelAlg;
     }
 
-    public void setLblTitleAlg(JLabel labelAlg1) {
-        this.labelAlg1 = labelAlg1;
+    public void setLblTitleAlg(JLabel labelAlg) {
+        this.labelAlg = labelAlg;
     }
-    
-    
-    
+
+    public JLabel getLblAlgMMU() {
+        return lblAlgMMU;
+    }
+
+    public void setLblAlgMMU(JLabel lblAlgMMU) {
+        this.lblAlgMMU = lblAlgMMU;
+    }
+
+    public JLabel getLblOptMMU() {
+        return lblOptMMU;
+    }
+
+    public void setLblOptMMU(JLabel lblOptMMU) {
+        this.lblOptMMU = lblOptMMU;
+    }
+
+    public JButton getBtnResumePause() {
+        return btnResumePause;
+    }
+
+    public void setBtnResumePause(JButton btnResumePause) {
+        this.btnResumePause = btnResumePause;
+    }
+
+    public JLabel getLabelAlg() {
+        return labelAlg;
+    }
+
+    public void setLabelAlg(JLabel labelAlg) {
+        this.labelAlg = labelAlg;
+    }
+
+    public JLabel getLabelOpt() {
+        return labelOpt;
+    }
+
+    public void setLabelOpt(JLabel labelOpt) {
+        this.labelOpt = labelOpt;
+    }
+
+    public JLabel getLblFragmentationAlg() {
+        return lblFragmentationAlg;
+    }
+
+    public void setLblFragmentationAlg(JLabel lblFragmentationAlg) {
+        this.lblFragmentationAlg = lblFragmentationAlg;
+    }
+
+    public JLabel getLblFragmentationOPT() {
+        return lblFragmentationOPT;
+    }
+
+    public void setLblFragmentationOPT(JLabel lblFragmentationOPT) {
+        this.lblFragmentationOPT = lblFragmentationOPT;
+    }
+
+    public JLabel getLblLoadedAlg() {
+        return lblLoadedAlg;
+    }
+
+    public void setLblLoadedAlg(JLabel lblLoadedAlg) {
+        this.lblLoadedAlg = lblLoadedAlg;
+    }
+
+    public JLabel getLblLoadedOPT() {
+        return lblLoadedOPT;
+    }
+
+    public void setLblLoadedOPT(JLabel lblLoadedOPT) {
+        this.lblLoadedOPT = lblLoadedOPT;
+    }
+
+    public JLabel getLblProcessAlg() {
+        return lblProcessAlg;
+    }
+
+    public void setLblProcessAlg(JLabel lblProcessAlg) {
+        this.lblProcessAlg = lblProcessAlg;
+    }
+
+    public JLabel getLblProcessOPT() {
+        return lblProcessOPT;
+    }
+
+    public void setLblProcessOPT(JLabel lblProcessOPT) {
+        this.lblProcessOPT = lblProcessOPT;
+    }
+
+    public JLabel getLblRamKbAlg() {
+        return lblRamKbAlg;
+    }
+
+    public void setLblRamKbAlg(JLabel lblRamKbAlg) {
+        this.lblRamKbAlg = lblRamKbAlg;
+    }
+
+    public JLabel getLblRamKbOPT() {
+        return lblRamKbOPT;
+    }
+
+    public void setLblRamKbOPT(JLabel lblRamKbOPT) {
+        this.lblRamKbOPT = lblRamKbOPT;
+    }
+
+    public JLabel getLblRamPercentageAlg() {
+        return lblRamPercentageAlg;
+    }
+
+    public void setLblRamPercentageAlg(JLabel lblRamPercentageAlg) {
+        this.lblRamPercentageAlg = lblRamPercentageAlg;
+    }
+
+    public JLabel getLblRamPercentageOPT() {
+        return lblRamPercentageOPT;
+    }
+
+    public void setLblRamPercentageOPT(JLabel lblRamPercentageOPT) {
+        this.lblRamPercentageOPT = lblRamPercentageOPT;
+    }
+
+    public JLabel getLblSimulationTimeAlg() {
+        return lblSimulationTimeAlg;
+    }
+
+    public void setLblSimulationTimeAlg(JLabel lblSimulationTimeAlg) {
+        this.lblSimulationTimeAlg = lblSimulationTimeAlg;
+    }
+
+    public JLabel getLblSimulationTimeOPT() {
+        return lblSimulationTimeOPT;
+    }
+
+    public void setLblSimulationTimeOPT(JLabel lblSimulationTimeOPT) {
+        this.lblSimulationTimeOPT = lblSimulationTimeOPT;
+    }
+
+    public JLabel getLblThrashingPercentageAlg() {
+        return lblThrashingPercentageAlg;
+    }
+
+    public void setLblThrashingPercentageAlg(JLabel lblThrashingPercentageAlg) {
+        this.lblThrashingPercentageAlg = lblThrashingPercentageAlg;
+    }
+
+    public JLabel getLblThrashingPercentageOPT() {
+        return lblThrashingPercentageOPT;
+    }
+
+    public void setLblThrashingPercentageOPT(JLabel lblThrashingPercentageOPT) {
+        this.lblThrashingPercentageOPT = lblThrashingPercentageOPT;
+    }
+
+    public JLabel getLblThrashingSecondsAlg() {
+        return lblThrashingSecondsAlg;
+    }
+
+    public void setLblThrashingSecondsAlg(JLabel lblThrashingSecondsAlg) {
+        this.lblThrashingSecondsAlg = lblThrashingSecondsAlg;
+    }
+
+    public JLabel getLblThrashingSecondsOPT() {
+        return lblThrashingSecondsOPT;
+    }
+
+    public void setLblThrashingSecondsOPT(JLabel lblThrashingSecondsOPT) {
+        this.lblThrashingSecondsOPT = lblThrashingSecondsOPT;
+    }
+
+    public JLabel getLblUnloadedAlg() {
+        return lblUnloadedAlg;
+    }
+
+    public void setLblUnloadedAlg(JLabel lblUnloadedAlg) {
+        this.lblUnloadedAlg = lblUnloadedAlg;
+    }
+
+    public JLabel getLblUnloadedOPT() {
+        return lblUnloadedOPT;
+    }
+
+    public void setLblUnloadedOPT(JLabel lblUnloadedOPT) {
+        this.lblUnloadedOPT = lblUnloadedOPT;
+    }
+
+    public JLabel getLblVRamKbAlg() {
+        return lblVRamKbAlg;
+    }
+
+    public void setLblVRamKbAlg(JLabel lblVRamKbAlg) {
+        this.lblVRamKbAlg = lblVRamKbAlg;
+    }
+
+    public JLabel getLblVRamKbOPT() {
+        return lblVRamKbOPT;
+    }
+
+    public void setLblVRamKbOPT(JLabel lblVRamKbOPT) {
+        this.lblVRamKbOPT = lblVRamKbOPT;
+    }
+
+    public JLabel getLblVRamPercentageAlg() {
+        return lblVRamPercentageAlg;
+    }
+
+    public void setLblVRamPercentageAlg(JLabel lblVRamPercentageAlg) {
+        this.lblVRamPercentageAlg = lblVRamPercentageAlg;
+    }
+
+    public JLabel getLblVRamPercentageOPT() {
+        return lblVRamPercentageOPT;
+    }
+
+    public void setLblVRamPercentageOPT(JLabel lblVRamPercentageOPT) {
+        this.lblVRamPercentageOPT = lblVRamPercentageOPT;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -106,8 +320,8 @@ public class SimulationWindow extends javax.swing.JFrame {
         optTable = new TableMMU();
         jPanelOPT = new javax.swing.JPanel();
         jPanelAlg = new javax.swing.JPanel();
+        labelOpt = new javax.swing.JLabel();
         labelAlg = new javax.swing.JLabel();
-        labelAlg1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -152,6 +366,9 @@ public class SimulationWindow extends javax.swing.JFrame {
         lblUnloadedAlg = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
+        lblOptMMU = new javax.swing.JLabel();
+        lblAlgMMU = new javax.swing.JLabel();
+        btnResumePause = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -181,9 +398,9 @@ public class SimulationWindow extends javax.swing.JFrame {
                         .addGap(0, 35, Short.MAX_VALUE)
         );
 
-        labelAlg.setText("RAM - OPT");
+        labelOpt.setText("RAM - OPT");
 
-        labelAlg1.setText("RAM - ALG");
+        labelAlg.setText("RAM - ALG");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Processes");
@@ -339,15 +556,19 @@ public class SimulationWindow extends javax.swing.JFrame {
         jLabel23.setText("Simulation-Time");
         jLabel23.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        lblOptMMU.setText("MMU - OPT");
+
+        lblAlgMMU.setText("MMU - ALG");
+
+        btnResumePause.setText("Pause");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jPanelOPT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jPanelAlg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jPanelOPT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
@@ -458,31 +679,48 @@ public class SimulationWindow extends javax.swing.JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addGap(492, 492, 492)
-                                                                .addComponent(labelAlg))
-                                                        .addGroup(layout.createSequentialGroup()
                                                                 .addGap(491, 491, 491)
-                                                                .addComponent(labelAlg1))
+                                                                .addComponent(labelAlg))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGap(12, 12, 12)
                                                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addGap(36, 36, 36)
-                                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addContainerGap()
+                                                                .addComponent(btnResumePause)
+                                                                .addGap(415, 415, 415)
+                                                                .addComponent(labelOpt)))
                                                 .addGap(0, 0, Short.MAX_VALUE)))
                                 .addGap(0, 12, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanelAlg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(227, 227, 227)
+                                .addComponent(lblOptMMU)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblAlgMMU)
+                                .addGap(215, 215, 215))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(labelAlg)
-                                .addGap(14, 14, 14)
+                                .addGap(13, 13, 13)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnResumePause, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(labelOpt))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jPanelOPT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(7, 7, 7)
-                                .addComponent(labelAlg1)
-                                .addGap(23, 23, 23)
+                                .addComponent(labelAlg)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jPanelAlg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(14, 14, 14)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblOptMMU)
+                                        .addComponent(lblAlgMMU))
+                                .addGap(4, 4, 4)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -517,13 +755,13 @@ public class SimulationWindow extends javax.swing.JFrame {
                                                                 .addGap(6, 6, 6)
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                         .addGroup(layout.createSequentialGroup()
-                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                        .addComponent(jLabel12)
-                                                                                        .addComponent(jLabel11))
+                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(jLabel11)
+                                                                                        .addComponent(jLabel12))
                                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                        .addComponent(lblUnloadedOPT, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)
-                                                                                        .addComponent(lblLoadedOPT, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)))
+                                                                                        .addComponent(lblUnloadedOPT, javax.swing.GroupLayout.DEFAULT_SIZE, 15, Short.MAX_VALUE)
+                                                                                        .addComponent(lblLoadedOPT, javax.swing.GroupLayout.DEFAULT_SIZE, 15, Short.MAX_VALUE)))
                                                                         .addComponent(lblThrashingPercentageOPT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(lblFragmentationOPT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                                         .addGroup(layout.createSequentialGroup()
@@ -559,13 +797,13 @@ public class SimulationWindow extends javax.swing.JFrame {
                                                                 .addGap(6, 6, 6)
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                         .addGroup(layout.createSequentialGroup()
-                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                        .addComponent(jLabel15)
-                                                                                        .addComponent(jLabel13))
+                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(jLabel13)
+                                                                                        .addComponent(jLabel15))
                                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                        .addComponent(lblUnloadedAlg, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)
-                                                                                        .addComponent(lblLoadedAlg, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)))
+                                                                                        .addComponent(lblUnloadedAlg, javax.swing.GroupLayout.DEFAULT_SIZE, 15, Short.MAX_VALUE)
+                                                                                        .addComponent(lblLoadedAlg, javax.swing.GroupLayout.DEFAULT_SIZE, 15, Short.MAX_VALUE)))
                                                                         .addComponent(lblThrashingPercentageAlg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(lblFragmentationAlg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                                         .addGroup(layout.createSequentialGroup()
@@ -576,7 +814,7 @@ public class SimulationWindow extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>
     /**
      * @param args the command line arguments
      */
@@ -620,10 +858,7 @@ public class SimulationWindow extends javax.swing.JFrame {
     private TableMMU optTable;
     private javax.swing.JPanel jPanelAlg;
     private javax.swing.JPanel jPanelOPT;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel labelAlg;
-    private javax.swing.JLabel labelAlg1;
+    private javax.swing.JButton btnResumePause;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -646,10 +881,16 @@ public class SimulationWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel labelAlg;
+    private javax.swing.JLabel labelOpt;
+    private javax.swing.JLabel lblAlgMMU;
     private javax.swing.JLabel lblFragmentationAlg;
     private javax.swing.JLabel lblFragmentationOPT;
     private javax.swing.JLabel lblLoadedAlg;
     private javax.swing.JLabel lblLoadedOPT;
+    private javax.swing.JLabel lblOptMMU;
     private javax.swing.JLabel lblProcessAlg;
     private javax.swing.JLabel lblProcessOPT;
     private javax.swing.JLabel lblRamKbAlg;

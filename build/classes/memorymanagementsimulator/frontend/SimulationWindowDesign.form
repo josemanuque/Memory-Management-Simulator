@@ -18,7 +18,6 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,126,0,0,4,16"/>
   </AuxValues>
 
   <Layout>
@@ -26,10 +25,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanelOPT" max="32767" attributes="0"/>
-                  <Component id="jPanelAlg" max="32767" attributes="0"/>
-              </Group>
+              <Component id="jPanelOPT" max="32767" attributes="0"/>
           </Group>
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
@@ -168,12 +164,8 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace min="492" pref="492" max="-2" attributes="0"/>
-                              <Component id="labelAlg" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
                               <EmptySpace min="491" pref="491" max="-2" attributes="0"/>
-                              <Component id="labelAlg1" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelAlg" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
@@ -181,26 +173,51 @@
                               <EmptySpace min="36" pref="36" max="-2" attributes="0"/>
                               <Component id="jScrollPane1" min="-2" pref="490" max="-2" attributes="0"/>
                           </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnResumePause" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="415" max="-2" attributes="0"/>
+                              <Component id="labelOpt" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="0" pref="12" max="32767" attributes="0"/>
           </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanelAlg" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="227" max="-2" attributes="0"/>
+              <Component id="lblOptMMU" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="lblAlgMMU" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="215" max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
-              <Component id="labelAlg" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="14" pref="14" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnResumePause" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                  <Component id="labelOpt" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPanelOPT" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="7" pref="7" max="-2" attributes="0"/>
-              <Component id="labelAlg1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="23" pref="23" max="-2" attributes="0"/>
+              <Component id="labelAlg" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPanelAlg" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="14" pref="14" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblOptMMU" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblAlgMMU" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPane2" min="-2" pref="225" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="225" max="-2" attributes="0"/>
@@ -241,14 +258,14 @@
                               <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="lblUnloadedOPT" alignment="3" pref="21" max="32767" attributes="0"/>
-                                          <Component id="lblLoadedOPT" alignment="3" pref="21" max="32767" attributes="0"/>
+                                          <Component id="lblUnloadedOPT" alignment="3" pref="15" max="32767" attributes="0"/>
+                                          <Component id="lblLoadedOPT" alignment="3" pref="15" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Component id="lblThrashingPercentageOPT" max="32767" attributes="0"/>
@@ -296,14 +313,14 @@
                               <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="lblUnloadedAlg" alignment="3" pref="21" max="32767" attributes="0"/>
-                                          <Component id="lblLoadedAlg" alignment="3" pref="21" max="32767" attributes="0"/>
+                                          <Component id="lblUnloadedAlg" alignment="3" pref="15" max="32767" attributes="0"/>
+                                          <Component id="lblLoadedAlg" alignment="3" pref="15" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Component id="lblThrashingPercentageAlg" alignment="0" max="32767" attributes="0"/>
@@ -398,12 +415,12 @@
         </DimensionLayout>
       </Layout>
     </Container>
-    <Component class="javax.swing.JLabel" name="labelAlg">
+    <Component class="javax.swing.JLabel" name="labelOpt">
       <Properties>
         <Property name="text" type="java.lang.String" value="RAM - OPT"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="labelAlg1">
+    <Component class="javax.swing.JLabel" name="labelAlg">
       <Properties>
         <Property name="text" type="java.lang.String" value="RAM - ALG"/>
       </Properties>
@@ -868,6 +885,21 @@
             <LineBorder/>
           </Border>
         </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblOptMMU">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="MMU - OPT"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblAlgMMU">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="MMU - ALG"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnResumePause">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Pause"/>
       </Properties>
     </Component>
   </SubComponents>

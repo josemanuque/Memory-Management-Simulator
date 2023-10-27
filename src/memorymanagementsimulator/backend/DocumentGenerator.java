@@ -38,10 +38,10 @@ public class DocumentGenerator {
                 pSize = randomSize.nextInt(16000) + 1; //generate nProcesses of 1-2-3 pages
                 newPtr(i);
                 activePids.add(i);
-                writer.write("new(" + i + ", " + pSize + ")\n");
+                writer.write("new(" + i + "," + pSize + ")\n");
             }
 
-            while (correctLines<=nLines-1){
+            while (correctLines<=nLines-1 && !activePtrs.isEmpty()){
                 int operation = 0;
                 int probability = probabilityRandom.nextInt(101);
                 if (probability >= 0 && probability <= 25) {
@@ -60,7 +60,7 @@ public class DocumentGenerator {
                         if (activePids.contains(pid)){
                             pSize = randomSize.nextInt(16000) + 1;
                             newPtr(pid);
-                            writer.write("new(" + pid + ", " + pSize + ")\n");
+                            writer.write("new(" + pid + "," + pSize + ")\n");
                             correctLines+=1;
                         }
                         break;

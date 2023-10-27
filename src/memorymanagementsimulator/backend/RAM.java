@@ -52,4 +52,23 @@ public class RAM {
 		}
 		return pagesQuantity - freeCount;
 	}
+
+	public int getUsedSpace(){
+		int usedCount = 0;
+		for(int i = 0; i < pagesQuantity; i++){
+			if (pages[i] != null)
+				usedCount++;
+		}
+		return usedCount;
+	}
+
+	public int getUsedPercentage(){
+		int usedCount = 0;
+		for(int i = 0; i < pagesQuantity; i++){
+			if (pages[i] != null)
+				usedCount++;
+		}
+		usedCount *= 4;
+		return usedCount * 100 / (pagesQuantity * 4);
+	}
 }

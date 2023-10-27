@@ -170,12 +170,12 @@ public class ConfigurationWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         dropdownAlgorithm.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        dropdownAlgorithm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FIFO", "Second Chance", "MRU", "RND" }));
+        dropdownAlgorithm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FIFO", "Second Chance", "MRU", "LRU", "RND" }));
 
         dropdownProcesses.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         dropdownProcesses.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "10", "50", "100" }));
 
-        dropdownOperations.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        dropdownOperations.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         dropdownOperations.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "500", "1000", "5000" }));
 
         txaReadFile.setColumns(20);

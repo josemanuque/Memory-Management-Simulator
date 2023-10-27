@@ -9,8 +9,10 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,10 +32,14 @@ public class OptMMUController {
 	private int selectedAlgorithm;
 	private int clock = 0;
 	private int thrashing = 0;
+	private boolean isPaused = false;
+	private SimulationController simulationController;
 
-	public OptMMUController(TableMMU tableMMU, RamComponent ramComponent){
+	public OptMMUController(SimulationController simulationController, TableMMU tableMMU, RamComponent ramComponent, String fileName){
 		this.tableMMU = tableMMU;
 		this.ramComponent = ramComponent;
+		this.fileName = fileName;
+		this.simulationController = simulationController;
 	}
 	public void joinRow(Object[] obj) {
 		tableMMU.addRow(obj, null);
@@ -53,15 +59,23 @@ public class OptMMUController {
 	public void deleteRow(int rowIndex){
 		tableMMU.deleteRow(rowIndex);
 		mmu.rearrangePagesRowIndex(rowIndex);
-		rowIndexSequence--;
+		if (rowIndexSequence > 0)
+			rowIndexSequence--;
 	}
 
 	public void startSimulationOPT() {
-		storeOnlineInfoOpt();
+		//storeOnlineInfoOpt();
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
+				while (isPaused) {
+					try {
+						Thread.sleep(1000); // Pausa el hilo hasta que se isPause sea falso
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 				// Utilizamos expresiones regulares para extraer las partes clave y valores
 				Pattern pattern = Pattern.compile("(new|use|delete|kill)\\((\\d+)(?:,(\\d+))?\\)");
 				Matcher matcher = pattern.matcher(line);
@@ -106,16 +120,44 @@ public class OptMMUController {
 					// La línea no tiene el formato esperado
 					System.out.println("Línea mal formateada: " + line);
 				}
-                            try {
-                                // Sleep por 2 segundos (2000 milisegundos)
-                                Thread.sleep(3000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+				int ramSize = mmu.getRam().getPagesQuantity();
+				simulationController.getSimulationWindow().getLblSimulationTimeOPT().setText(clock + "s");
+				simulationController.getSimulationWindow().getLblProcessOPT().setText(mmu.getProcesses().size() + "");
+				simulationController.getSimulationWindow().getLblRamKbOPT().setText(mmu.getRam().getUsedSpace() * 4 + " KB");
+				simulationController.getSimulationWindow().getLblRamPercentageOPT().setText(mmu.getRam().getUsedPercentage() + "%");
+				int vRamKbSize = mmu.getPagesInVRam().size() * 4;
+				simulationController.getSimulationWindow().getLblVRamKbOPT().setText(vRamKbSize + " KB");
+				simulationController.getSimulationWindow().getLblVRamPercentageOPT().setText(vRamKbSize * 100 / (ramSize * 4) + "%");
+				simulationController.getSimulationWindow().getLblLoadedOPT().setText(mmu.getRam().getUsedSpace() + "");
+				simulationController.getSimulationWindow().getLblUnloadedOPT().setText(mmu.getPagesInVRam().size() + "");
+				simulationController.getSimulationWindow().getLblThrashingSecondsOPT().setText(this.thrashing + "s");
+				DecimalFormat df = new DecimalFormat("0.00");
+				simulationController.getSimulationWindow().getLblFragmentationOPT().setText(df.format(mmu.calculateInternalFragmentation()) + " KB");
+				int thrashingPercentage = 0;
+				if (clock > 0) {
+					 thrashingPercentage = thrashing * 100 / clock;
+				}
+				simulationController.getSimulationWindow().getLblThrashingPercentageOPT().setText(thrashingPercentage + "%");
+				if (thrashingPercentage > 50)
+					simulationController.getSimulationWindow().getLblThrashingPercentageOPT().setForeground(Color.red);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
+			simulationController.setHasSimulationEnded(true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void pauseThread() {
+		isPaused = true;
+	}
+
+	public void resumeThread() {
+			isPaused = false;
 	}
 
 	public int newProcess(int processID, int size){
@@ -167,8 +209,9 @@ public class OptMMUController {
 					updateCell(pageToReplace.getRowIndex(), 5, pageToReplace.getVRamAddress());
 					ramAddress = pageToReplace.getRamAddress();
 					vRamSequence++;
-					clock += 5;
+					clock += 4;
 					thrashing += 5;
+					System.out.println(clock);
 				}
 				page.setRamAddress(ramAddress);
 				page.setLoaded(true);
@@ -186,6 +229,7 @@ public class OptMMUController {
 				Color c = processColor.get(processID);
 				joinRow(obj, c);
 				updateRamDisplay(page, c);
+				clock += 1;
 			}else {
 				clock += 1;
 			}
@@ -212,6 +256,7 @@ public class OptMMUController {
 					updateCell(pageToReplace.getRowIndex(), 4, null);
 					updateCell(pageToReplace.getRowIndex(), 5, pageToReplace.getVRamAddress());
 					ramAddress = pageToReplace.getRamAddress();
+					mmu.getPagesInVRam().remove(pageToReplace);
 					vRamSequence++;
 					clock += 5;
 					thrashing += 5;
@@ -251,10 +296,12 @@ public class OptMMUController {
 				ram.removePage(page.getRamAddress());
 				updateRamDisplay(page, null);
 			}
+			mmu.getPages().remove(page);
 			deleteRow(page.getRowIndex());
 		}
 		pages.clear();
 		pointersPages.remove(pointer);
+
 	}
 
 	public void kill(int processID){
@@ -306,7 +353,7 @@ public class OptMMUController {
 							break;
 						default:
 							// La línea no corresponde a una operación conocida
-							//System.out.println("Línea no reconocida: " + line);
+							System.out.println("Línea no reconocida: " + line);
 					}
 				} else {
 					// La línea no tiene el formato esperado
@@ -327,13 +374,13 @@ public class OptMMUController {
 		for (int i = useNewInstructionCount + 1; i < pointers.size(); i++){
 			ptr = pointers.get(i);
 			// Checks that ptr is not the same as the request pointer and that pages in ptr are not in v ram.
-			if(ptr !=  requestPointer && !mmu.arePagesInVRam(ptr)) {
+			if(ptr !=  requestPointer && mmu.getSymbolTable().containsKey(ptr) && !mmu.arePagesInVRam(ptr)) {
 				nextUseIndex.putIfAbsent(ptr, i);
 			}
 		}
 
 		for(int pointer : pointers){ // Reviews all pointers if there is one that will no longer be used, will be selected
-			if(pointer !=  requestPointer && !mmu.arePagesInVRam(pointer) ) {
+			if(pointer !=  requestPointer && mmu.getSymbolTable().containsKey(ptr) && !mmu.arePagesInVRam(pointer) ) {
 				nextUseIndex.putIfAbsent(pointer, Integer.MAX_VALUE);
 			}
 		}
@@ -354,7 +401,7 @@ public class OptMMUController {
 				Random random = new Random();
 				int randomIndex = random.nextInt(availablePointers.size());
 				replacementPointer = availablePointers.get(randomIndex);
-				if (replacementPointer != requestPointer) {
+				if (replacementPointer != requestPointer && !mmu.arePagesInVRam(replacementPointer)) {
 					found = true;
 				}
 			}
@@ -395,7 +442,7 @@ public class OptMMUController {
 		// Comprobar si el nuevo color es demasiado cercano a los colores existentes en el mapa
 		for (Color existingColor : processColor.values()) {
 			double colorDistance = getColorDistance(newColor, existingColor);
-			if (colorDistance < 0.2) { // Ajusta este valor según tus preferencias
+			if (colorDistance < 0.05) { // Ajusta este valor según tus preferencias
 				return true;
 			}
 		}

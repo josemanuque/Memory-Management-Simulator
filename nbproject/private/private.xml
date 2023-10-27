@@ -3,7 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/josemanuque/Documents/Dev/Memory-Management-Simulator/src/memorymanagementsimulator/backend/RAM.java</file>
+            <file>file:/C:/Users/josemanuque/Documents/Dev/Memory-Management-Simulator/src/memorymanagementsimulator/frontend/SimulationWindowDesign.java</file>
             <file>file:/C:/Users/josemanuque/Documents/Dev/Memory-Management-Simulator/src/memorymanagementsimulator/controllers/AlgMMUController.java</file>
+            <file>file:/C:/Users/josemanuque/Documents/Dev/Memory-Management-Simulator/src/memorymanagementsimulator/frontend/ConfigurationWindow.java</file>
+            <file>file:/C:/Users/josemanuque/Documents/Dev/Memory-Management-Simulator/src/memorymanagementsimulator/controllers/SimulationController.java</file>
+            <file>file:/C:/Users/josemanuque/Documents/Dev/Memory-Management-Simulator/src/memorymanagementsimulator/controllers/OptMMUController.java</file>
             <file>file:/C:/Users/josemanuque/Documents/Dev/Memory-Management-Simulator/src/memorymanagementsimulator/MemoryManagementSimulator.java</file>
         </group>
     </open-files>

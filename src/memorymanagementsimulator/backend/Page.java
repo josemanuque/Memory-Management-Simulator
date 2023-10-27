@@ -20,7 +20,7 @@ public class Page {
 		this.pageID = pageID;
 		this.loaded = false;
 		this.logicalAddress = generateRandomString(10);
-		this.referenceBit = 0;
+		this.referenceBit = 1;
 		this.timestamp = 0;
 		this.rowIndex = rowIndex;
 	}
@@ -81,8 +81,12 @@ public class Page {
 		return timestamp;
 	}
 
-	public void updateTimestamp(long timestamp) {
+	public void updateTimestamp() {
 		this.timestamp = System.currentTimeMillis(); //usarlo en el use para actualizar tiempo de acceso
+	}
+
+	public void updateReferenceBit() {
+		this.referenceBit = 0;
 	}
 
 	public int getRamAddress() {
