@@ -9,6 +9,5 @@ public class main {
         //simulationController.startSimulation("C:\\Projects\\SO2\\Memory-Management-Simulator\\instructions\\instructions.txt");
         DocumentGenerator dc = new DocumentGenerator();
         dc.generateDocument(100,500);
-        System.out.println("done");
     }
 }

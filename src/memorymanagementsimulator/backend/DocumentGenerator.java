@@ -6,8 +6,8 @@ import java.util.*;
 
 public class DocumentGenerator {
     private Map<Integer, Integer> symbolTable; // ptr -> process
-    private ArrayList<Integer> activePids = new ArrayList<Integer>();
-    private ArrayList<Integer> activePtrs = new ArrayList<Integer>();
+    private ArrayList<Integer> activePids;
+    private ArrayList<Integer> activePtrs;
     private int ptrCounter;
     public DocumentGenerator() {
         this.symbolTable = new HashMap<>();
@@ -109,7 +109,6 @@ public class DocumentGenerator {
                     writer.write("kill(" + activePids.get(i) + ")\n");
                 }
             }
-            System.out.println("done");
         } catch (IOException e) {
             e.printStackTrace();
         }
