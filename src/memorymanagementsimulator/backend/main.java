@@ -1,10 +1,14 @@
 package memorymanagementsimulator.backend;
 
-import static memorymanagementsimulator.backend.DocumentGenerator.generateDocument2;
-//import static memorymanagementsimulator.backend.MMU.startSimulation;
+import memorymanagementsimulator.controllers.SimulationController;
+
 
 public class main {
     public static void main(String[] args) {
-        //startSimulation("instructions/minimalInstructions.txt");
+        SimulationController simulationController = new SimulationController();
+        //simulationController.startSimulation("C:\\Projects\\SO2\\Memory-Management-Simulator\\instructions\\instructions.txt");
+        DocumentGenerator dc = new DocumentGenerator();
+        long seed = 1234589;
+        dc.generateDocument(100,500, seed);
     }
 }

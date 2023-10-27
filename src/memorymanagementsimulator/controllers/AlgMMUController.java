@@ -16,18 +16,18 @@ import java.util.regex.Pattern;
 
 public class AlgMMUController {
     MMU mmu = new MMU();
-    MMU algMMU = new MMU();
     int pointerSequence = 0;
     int pageSequence = 0;
     int vRamSequence = 100;
     int rowIndexSequence = 0;
     int useNewInstructionCount = 0;
-    private List<Integer> pointers = new ArrayList<>();
     private Map<Integer, Color> processColor = new HashMap<>();
     private String fileName = "instructions/minimalInstructions.txt";
     private TableMMU tableMMU;
     private  RamComponent ramComponent;
     private String selectedAlgorithm;
+    private int clock = 0;
+    private int thrashing = 0;
 
     public AlgMMUController(TableMMU tableMMU, RamComponent ramComponent, String selectedAlgorithm){
         this.tableMMU = tableMMU;
@@ -56,7 +56,6 @@ public class AlgMMUController {
     }
 
     public void startSimulation() {
-
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -165,6 +164,8 @@ public class AlgMMUController {
                     updateCell(pageToReplace.getRowIndex(), 5, pageToReplace.getVRamAddress());
                     ramAddress = pageToReplace.getRamAddress();
                     vRamSequence++;
+                    clock += 5;
+                    thrashing += 5;
                 }
                 page.setRamAddress(ramAddress);
                 ram.setPage(ramAddress, page);
@@ -183,11 +184,12 @@ public class AlgMMUController {
                 Color c = processColor.get(processID);
                 joinRow(obj, c);
                 updateRamDisplay(page, c);
+            }else{
+                clock += 1;
             }
         }
-
-
     }
+
     public void use(int pointer){
         RAM ram = mmu.getRam();
         int freePages = ram.getFreeSpacesSize();
@@ -208,6 +210,8 @@ public class AlgMMUController {
                     updateCell(pageToReplace.getRowIndex(), 5, pageToReplace.getVRamAddress());
                     ramAddress = pageToReplace.getRamAddress();
                     vRamSequence++;
+                    clock += 5;
+                    thrashing += 5;
                 }
                 page.setRamAddress(ramAddress);
                 ram.setPage(ramAddress, page);
@@ -227,9 +231,10 @@ public class AlgMMUController {
                 updateRow(page.getRowIndex(), obj);
                 updateRamDisplay(page, c);
             }
+            else{
+                clock += 1;
+            }
         }
-
-
     }
 
     public void delete(int pointer){
@@ -283,7 +288,7 @@ public class AlgMMUController {
         }
         return pageToReplace;
     }
-    public Page fifoReplacement(){
+    public Page fifoReplacement(){ //ARREGLAR FIFO
         RAM ram = mmu.getRam();
         Page[] pagesInRam = ram.getPages();
         Page pageToReplace = pagesInRam[0];
@@ -293,7 +298,6 @@ public class AlgMMUController {
         mmu.addPageToVRam(pageToReplace);
         return pageToReplace;
     }
-
     public Page secondChanceReplacement(){
         Page pageToReplace = null;
         RAM ram = mmu.getRam();
@@ -301,8 +305,7 @@ public class AlgMMUController {
         boolean found = false;
 
         while(!found) {
-            for (int i = 0; i < ram.getPagesQuantity(); i++) {
-                Page p = pagesInRam[i];
+            for (Page p : pagesInRam) {
                 if (p.getReferenceBit() == 0) {
                     pageToReplace = p;
                     found = true;
@@ -359,7 +362,6 @@ public class AlgMMUController {
 
     public Page randomReplacement(){
         RAM ram = mmu.getRam();
-        Page[] pagesInRam = ram.getPages();
         Random random = new Random();
 
         int randIndex = random.nextInt(ram.getPagesQuantity());
@@ -424,5 +426,17 @@ public class AlgMMUController {
 
     public void updateRamDisplay(Page page, Color c){
         ramComponent.setPageColor(page.getRamAddress(), c);
+    }
+
+    public int getClock() {
+        return clock;
+    }
+
+    public int getThrashing() {
+        return thrashing;
+    }
+
+    public double thrashingPercentage(){
+        return (double) thrashing / clock * 100;
     }
 }
