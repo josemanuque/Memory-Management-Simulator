@@ -22,17 +22,17 @@ public class DocumentGenerator {
         activePtrs.add(ptrCounter);
     }
 
-    public void generateDocument(int nProcesses, int nLines) {
+    public void generateDocument(int nProcesses, int nLines,  long seed) {
         try (FileWriter writer = new FileWriter("instructions.txt")) {
             int pid = 0;
             int ptrid = 0;
             int pSize = 0;
             int correctLines = nProcesses;
 
-            Random randomPid = new Random();
-            Random randomPtr = new Random();
-            Random randomSize = new Random();
-            Random probabilityRandom = new Random();
+            Random randomPid = new Random(seed);
+            Random randomPtr = new Random(seed);
+            Random randomSize = new Random(seed);
+            Random probabilityRandom = new Random(seed);
 
             for (int i = 1;i<nProcesses+1;i++){
                 pSize = randomSize.nextInt(16000) + 1; //generate nProcesses of 1-2-3 pages
